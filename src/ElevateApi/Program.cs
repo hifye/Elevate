@@ -1,11 +1,11 @@
 using ElevateApi.Configurations;
-using Infraestructure.Configurations;
+using Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddInfraestructure(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPresentation();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

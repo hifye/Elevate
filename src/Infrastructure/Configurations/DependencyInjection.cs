@@ -3,11 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
-namespace Infraestructure.Configurations;
+namespace Infrastructure.Configurations;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfraestructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IDbConnection>(_ =>
             new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")));
