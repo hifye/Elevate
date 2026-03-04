@@ -3,7 +3,7 @@
 public class Result(bool isSuccess, string? error)
 {
     private bool IsSuccess { get; } = isSuccess; //deu certo?
-    protected bool IsFailure => !IsSuccess; //deu errado?
+    public bool IsFailure => !IsSuccess; //deu errado?
     protected string? Error { get; } = error; //qual foi o erro?
 
     public static Result Success() => new Result(true, null);
