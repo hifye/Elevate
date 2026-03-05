@@ -9,14 +9,15 @@ public class User
     public int RoleId { get; private set; }
     public string Name { get; private set; }
     public Email Email { get; private set; }
-    public string PasswordHash { get; private set; }
+    public string PasswordHash { get; private set; } = null!;
+    public string RefreshToken { get; private set; } = null!;
+    public DateTime? RefreshTokenExpiresAt { get; private set; }
 
     private User(int roleId, string name, Email email, string passwordHash)
     {
         RoleId = roleId;
         Name = name;
         Email = email;
-        PasswordHash = passwordHash;
     }
 
     public static Result<User> Create(int roleId, string name, string email, string passwordHash)

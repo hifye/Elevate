@@ -5,7 +5,7 @@ namespace Domain.Entities.Catalog;
 
 public class Course
 {
-    public int Id { get; private set; }
+    public Guid Id { get; private set; }
     public string Title { get; private set; }
     public string Description { get; private set; }
     public Price Price { get; private set; }

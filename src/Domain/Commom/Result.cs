@@ -27,8 +27,8 @@ public class Result(bool isSuccess, string? error)
     public Result Bind(Func<Result> func)
     {
         if (IsFailure)
-            return this; // se falhou, para aqui
-        return func(); // tudo ok, executa o próximo
+            return this;
+        return func(); 
     }
 
     /// <summary>
@@ -48,9 +48,9 @@ public class Result(bool isSuccess, string? error)
     public Result<T> Bind<T>(Func<Result<T>> func)
     {
         if (IsFailure)
-            return Result<T>.Failure(Error!); // se falhou, para aqui e repassa o erro
+            return Result<T>.Failure(Error!);
 
-        return func(); // tudo ok, produz o valor
+        return func();
     }
 
     /// <summary>
@@ -146,6 +146,6 @@ public class Result<T> : Result
         if (IsFailure)
             return Result<K>.Failure(Error!);
 
-        return Result<K>.Success(func(Value!)); // recebe T, devolve K empacotado
+        return Result<K>.Success(func(Value!));
     }
 }

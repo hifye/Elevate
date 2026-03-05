@@ -5,21 +5,21 @@ namespace Domain.Entities.Catalog;
 public class Module
 {
     public int Id { get; private set; }
-    public int CourseId { get; private set; }
+    public Guid CourseId { get; private set; }
     public string Title { get; private set; }
     public int OrderNumber { get; private set; }
 
-    private Module(int courseId, string title, int orderNumber)
+    private Module(Guid courseId, string title, int orderNumber)
     {
         CourseId = courseId;
         Title = title;
         OrderNumber = orderNumber;
     }
 
-    public static Result<Module> Create(int courseId, string title, int orderNumber)
+    public static Result<Module> Create(Guid courseId, string title, int orderNumber)
     {
         return Guard
-            .AgainstOutOfRange(courseId < 1, "Course Id must be greater than 0")
+            .AgainstOutOfRange(courseId == Guid.Empty, "Course Id is required")
             .Bind(() => Guard.AgainstNullOrWhiteSpace(title, "Title cannot be null"))
             .Bind(() =>
                 title.Length > 100
