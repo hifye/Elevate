@@ -22,23 +22,32 @@ public class LessonRepository : ILessonRepository
     #endregion
 
     public async Task Create(Lesson lesson) => await _contextDapper.ExecuteAsync(
-										   @"insert into catalog.lessons(
-	                     							 module_id as ModuleId,
-	                      							 title as Title,
-	                      							 video_url as VideoUrl,
-	                      							 order_number as OrderNumber)
-                    							values(
-	                        							@ModuleId,
-	                        							@Title,
-	                        							@VideoUrl,
-	                        							@OrderNumber", lesson, _unitOfWork.Transaction);
+										   @"insert into catalog.lessons(module_id, title, video_url, order_number)
+                    							values(@ModuleId, @Title, @VideoUrl, @OrderNumber", 
+										   new
+										   {
+											   lesson.ModuleId, 
+											   lesson.Title, 
+											   lesson.VideoUrl, 
+											   lesson.OrderNumber
+										   }, _unitOfWork.Transaction);
 
-    public void Update(Lesson lesson) => _contextDapper.ExecuteAsync(
-									@"update catalog.lessons
-											set title = @Title ,
-											order_number = @OrderNumber
-											where id = @Id", lesson, _unitOfWork.Transaction);
+    public async Task<bool> Update(Lesson lesson)
+    {
+	   var rowsAffected = await  _contextDapper.ExecuteAsync(
+								@"update catalog.lessons
+										set title = @Title ,
+										order_number = @OrderNumber
+									where id = @Id", 
+								new
+								{
+									lesson.Title, 
+									lesson.OrderNumber,
+									lesson.Id
+								}, _unitOfWork.Transaction);
+	   return rowsAffected > 0;
 
+    }
     public async Task<bool> Delete(int id)
     {
 		var rowsAffected =  await _contextDapper.ExecuteAsync(

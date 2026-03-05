@@ -107,12 +107,13 @@ public class EnrollmentRepository : IEnrollmentRepository
     }
 
     public async Task Create(Enrollment enrollment) => await _contextDapper.ExecuteAsync(
-                                                   @"insert into learning.enrollments(
-            	                                           user_id as UserId,
-	                                                       course_id as CourseId)
-                                                       values(
-	                                                        @UserId,
-                                                            @CourseId)", enrollment, _unitOfWork.Transaction);
+                                                   @"insert into learning.enrollments(user_id,course_id)
+                                                       values(@UserId, @CourseId)",
+                                                   new
+                                                   {
+                                                       enrollment.UserId,
+                                                       enrollment.CourseId
+                                                   }, _unitOfWork.Transaction);
 
     public async Task<bool> Delete(Guid userId, int courseId)
     {

@@ -1,8 +1,8 @@
 ﻿using System.Data;
-using System.Reflection;
 using Application.Contracts.Repositories.Catalog;
 using Application.Contracts.UnitOfWork;
 using Dapper;
+using Module = Domain.Entities.Catalog.Module;
 
 namespace Infrastructure.Repositories.Catalog;
 
@@ -22,21 +22,31 @@ public class ModuleRepository : IModuleRepository
     #endregion
     
     public async Task Create(Module module) => await _contextDapper.ExecuteAsync(
-                                            @"insert into catalog.modules(
-	                                                    course_id,
-	                                                    title,
-	                                                    order_number)
-                                                  values(
-	                                                    @CourseId,
-	                                                    @Title,
-	                                                    @OrderNumber)", module, _unitOfWork.Transaction);
+                                            @"insert into catalog.modules(course_id, title, order_number)
+                                                  values(@CourseId, @Title, @OrderNumber)",
+                                            new
+                                            {
+	                                            module.CourseId, 
+	                                            module.Title, 
+	                                            module.OrderNumber
+                                            });
 
-    public void Update(Module module) => _contextDapper.ExecuteAsync(
-								    @"update catalog.modules
-											set title as Title,
-											order_number as OrderNumber
-											where id = @Id", module, _unitOfWork.Transaction);
+    public async Task<bool> Update(Module module)
+    {
+	   var rowsAffected = await _contextDapper.ExecuteAsync(
+										@"update catalog.modules
+											set title = @Title,
+											order_number = @OrderNumber,
+											where id = @Id",
+										new
+										{
+											module.Title, 
+											module.OrderNumber, 
+											module.Id
+										}, _unitOfWork.Transaction);
+	   return rowsAffected > 0;
 
+    }
     public async Task<bool> Delete(int id)
     {
 	    var rowsAffected = await _contextDapper.ExecuteAsync(

@@ -33,7 +33,7 @@ public class CourseRepository : ICourseRepository
     /// </returns>
     public async Task<IEnumerable<CourseResponse>> GetAllCourseByAllInstructors()
     {
-        var courseDictionary = new Dictionary<Guid, CourseResponse>();
+        var courseDictionary = new Dictionary<Guid, CourseResponse>();  
 
         await _contextDapper.QueryAsync<CourseResponse, InstructorResponse, CourseResponse>(
             @"select c.id as Id,
@@ -61,7 +61,7 @@ public class CourseRepository : ICourseRepository
 
 
     /// <summary>
-    /// Recupera todos os cursos junto com seus módulos e aulas associadas.
+    /// Recupera todos os cursos com seus módulos e aulas associadas.
     /// Os dados são extraídos das tabelas de cursos, módulos e aulas.
     /// </summary>
     /// <returns>
@@ -215,23 +215,34 @@ public class CourseRepository : ICourseRepository
     }
 
     public async Task Create(Course course) => await _contextDapper.ExecuteAsync(
-                                           @"insert into catalog.courses(
-                                                             title as Title, 
-                                                             description as Description, 
-                                                             price as Price, 
-                                                             instructor_id as InstructorId)
-	                                                    values(@Title,
-		                                                       @Description,
-		                                                       @Price,
-		                                                       @Id", course, _unitOfWork.Transaction);
+                                           @"insert into catalog.courses(title, description, price, instructor_id)
+	                                                    values(@Title,@Description,@Price, @Id",
+                                           new
+                                           {
+                                               course.Title,
+                                               course.Description,
+                                               course.Price,
+                                               course.InstructorId
+                                           });
 
-    public void Update(Course course) => _contextDapper.Execute(
-                                                    @"update catalog.courses
-                                                        set title = @Title,
-	                                                    description = @Description,
-	                                                    price = @Price
-                                                        where id = @Id", course, _unitOfWork.Transaction);
+    public async Task<bool> Update(Course course)
+    {
+        var rowsAffected = await _contextDapper.ExecuteAsync(
+                                @"update catalog.courses
+                                    set title = @Title,
+	                                description = @Description,
+	                                price = @Price
+                                    where id = @Id",
+                            new
+                                      {
+                                      course.Title,
+                                      course.Description,
+                                      course.Price,
+                                      course.Id
+                                      }, _unitOfWork.Transaction);
+        return rowsAffected > 0;
 
+    }
     public async Task<bool> Delete(Guid id)
     {
             var rowsAffected = await _contextDapper.ExecuteAsync(

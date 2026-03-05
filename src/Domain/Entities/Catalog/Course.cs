@@ -28,6 +28,7 @@ public class Course
     {
         return Guard
             .AgainstNullOrWhiteSpace(title, "Title cannot be null")
+            .Bind(() => title.Length > 100 ? Result.Failure("Title cannot be longer than 100 characters.") : Result.Success())
             .Bind(() => Guard.AgainstNullOrWhiteSpace(description, "Description cannot be null"))
             .Bind(() => Guard.AgainstOutOfRange(price < 1, "Price must be greater than 0"))
             .Bind(() =>
