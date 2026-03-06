@@ -11,13 +11,12 @@
       <PackageReference Include="FluentValidation" Version="12.1.1" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
       <PackageReference Include="MediatR" Version="13.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.13" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Features\Catalog\Commands\Course\" />
       <Folder Include="Features\Catalog\Queries\Course\" />
-      <Folder Include="Services\" />
-      <Folder Include="Shared\" />
     </ItemGroup>
 
     <ItemGroup>

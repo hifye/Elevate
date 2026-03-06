@@ -1,4 +1,4 @@
-﻿namespace Domain.Commom;
+﻿﻿namespace Domain.Commom;
 
 /// <summary>
 /// Representa o resultado de uma operação, podendo ser um sucesso ou uma falha.
@@ -97,8 +97,8 @@ public class Result(bool isSuccess, string? error)
 public class Result<T> : Result
 {
     public T? Value { get; }
-    
-    private Result(bool isSuccess, string? error, T? value)
+
+    public Result(bool isSuccess, string? error, T? value)
         : base(isSuccess, error)
     {
         Value = value;

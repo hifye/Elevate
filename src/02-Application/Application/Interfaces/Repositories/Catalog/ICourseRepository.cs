@@ -1,7 +1,7 @@
 ﻿using Application.Features.Catalog.Responses;
 using Domain.Entities.Catalog;
 
-namespace Application.Contracts.Repositories.Catalog;
+namespace Application.Interfaces.Repositories.Catalog;
 
 public interface ICourseRepository
 {

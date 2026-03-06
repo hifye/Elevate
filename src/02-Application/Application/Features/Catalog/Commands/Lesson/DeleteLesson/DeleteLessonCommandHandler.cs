@@ -1,5 +1,5 @@
-﻿using Application.Contracts.Repositories.Catalog;
-using Application.Contracts.UnitOfWork;
+﻿using Application.Contracts.UnitOfWork;
+using Application.Interfaces.Repositories.Catalog;
 using Domain.Commom;
 using MediatR;
 

@@ -11,7 +11,7 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
             .EmailAddress().WithMessage("Invalid Email")
             .MaximumLength(200).WithMessage("Email cannot be longer than 200 characters.");
         
-        RuleFor(x => x.PasswordHash)
+        RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required");
     }
 }

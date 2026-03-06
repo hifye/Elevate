@@ -1,11 +1,11 @@
 ﻿using System.Data;
-using Application.Contracts.Repositories.Auth;
 using Application.Contracts.UnitOfWork;
+using Application.Interfaces.Repositories.Auth;
 using Dapper;
 using Domain.Entities.Auth;
 using Domain.ValuesObjects;
 
-namespace Infrastructure.Repositories.Auth;
+namespace Infrastructure.Persistance.Repositories.Auth;
 
 public class UserRepository : IUserRepository
 {

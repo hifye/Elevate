@@ -1,5 +1,5 @@
-﻿using Application.Contracts.Repositories.Learning;
-using Application.Contracts.UnitOfWork;
+﻿using Application.Contracts.UnitOfWork;
+using Application.Interfaces.Repositories.Learning;
 using Domain.Commom;
 using MediatR;
 

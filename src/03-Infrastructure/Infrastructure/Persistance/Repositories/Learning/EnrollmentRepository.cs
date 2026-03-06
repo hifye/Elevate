@@ -1,12 +1,12 @@
 ﻿using System.Data;
-using Application.Contracts.Repositories.Learning;
 using Application.Contracts.UnitOfWork;
 using Application.Features.Auth.Responses;
 using Application.Features.Learning.Responses;
+using Application.Interfaces.Repositories.Learning;
 using Dapper;
 using Domain.Entities.Learning;
 
-namespace Infrastructure.Repositories.Learning;
+namespace Infrastructure.Persistance.Repositories.Learning;
 
 public class EnrollmentRepository : IEnrollmentRepository
 {

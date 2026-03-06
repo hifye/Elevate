@@ -1,13 +1,13 @@
-﻿using Application.Contracts.Repositories.Catalog;
-using Application.Contracts.UnitOfWork;
+﻿using Application.Contracts.UnitOfWork;
 using Application.Features.Catalog.Responses;
+using Application.Interfaces.Repositories.Catalog;
 using AutoMapper;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Commands.Course.CreateCourse;
 
-public class CreateCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork, IMapper mapper)
+public class CreateCourseCommandHandler(ICourseRepository _courseRepository, IUnitOfWork _unitOfWork, IMapper _mapper)
     : IRequestHandler<CreateCourseCommand, Result<CourseResponse>>
 {
     /// <summary>
@@ -25,9 +25,9 @@ public class CreateCourseCommandHandler(ICourseRepository courseRepository, IUni
         if(result.IsFailure)
             return Result<CourseResponse>.Failure(result.Error!);
         
-        await courseRepository.Create(result.Value!);
-        await unitOfWork.CommitAsync();
+        await _courseRepository.Create(result.Value!);
+        await _unitOfWork.CommitAsync();
 
-        return Result<CourseResponse>.Success(mapper.Map<CourseResponse>(result.Value));
+        return Result<CourseResponse>.Success(_mapper.Map<CourseResponse>(result.Value));
     }
 }

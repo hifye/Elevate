@@ -10,8 +10,8 @@ public class User
     public string Name { get; private set; }
     public Email Email { get; private set; }
     public string PasswordHash { get; private set; }
-    public string? RefreshToken { get; private set; }
-    public DateTime? RefreshTokenExpiresAt { get; private set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiresAt { get; set; }
 
     private User(int roleId, string name, Email email, string passwordHash)
     {

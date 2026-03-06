@@ -1,6 +1,6 @@
-﻿using Application.Contracts.Repositories.Learning;
-using Application.Features.Auth.Responses;
+﻿using Application.Features.Auth.Responses;
 using Application.Features.Learning.Responses;
+using Application.Interfaces.Repositories.Learning;
 using MediatR;
 
 namespace Application.Features.Learning.Queries.GetAllEnrollmentsByStudents;

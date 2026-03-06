@@ -1,6 +1,6 @@
-﻿using Application.Contracts.Repositories.Learning;
-using Application.Contracts.UnitOfWork;
+﻿using Application.Contracts.UnitOfWork;
 using Application.Features.Learning.Responses;
+using Application.Interfaces.Repositories.Learning;
 using AutoMapper;
 using Domain.Commom;
 using Domain.Entities.Learning;

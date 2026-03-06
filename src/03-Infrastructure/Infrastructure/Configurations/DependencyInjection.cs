@@ -1,14 +1,19 @@
 ﻿using System.Data;
-using Application.Contracts.Repositories.Auth;
-using Application.Contracts.Repositories.Catalog;
-using Application.Contracts.Repositories.Learning;
+using System.Text;
 using Application.Contracts.UnitOfWork;
+using Application.Interfaces.Repositories.Auth;
+using Application.Interfaces.Repositories.Catalog;
+using Application.Interfaces.Repositories.Learning;
+using Application.Interfaces.Services;
 using Infrastructure.Persistance;
-using Infrastructure.Repositories.Auth;
-using Infrastructure.Repositories.Catalog;
-using Infrastructure.Repositories.Learning;
+using Infrastructure.Persistance.Repositories.Auth;
+using Infrastructure.Persistance.Repositories.Catalog;
+using Infrastructure.Persistance.Repositories.Learning;
+using Infrastructure.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 
 namespace Infrastructure.Configurations;
@@ -23,10 +28,29 @@ public static class DependencyInjection
         services.AddScoped<IModuleRepository, ModuleRepository>();
         services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        
+        services.AddScoped<Argon2Hasher>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
         
         services.AddScoped<IDbConnection>(_ =>
             new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")));
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(opt =>
+            {
+                opt.SaveToken = true;
+                opt.RequireHttpsMetadata = false;
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                };
+            });
         
         return services;
     }

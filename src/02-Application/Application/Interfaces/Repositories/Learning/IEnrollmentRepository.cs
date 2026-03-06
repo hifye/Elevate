@@ -1,7 +1,7 @@
 ﻿using Application.Features.Auth.Responses;
 using Domain.Entities.Learning;
 
-namespace Application.Contracts.Repositories.Learning;
+namespace Application.Interfaces.Repositories.Learning;
 
 public interface IEnrollmentRepository
 {

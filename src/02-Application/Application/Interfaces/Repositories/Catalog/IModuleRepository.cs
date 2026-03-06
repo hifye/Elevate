@@ -1,7 +1,6 @@
-﻿using System.Reflection;
-using Module = Domain.Entities.Catalog.Module;
+﻿using Module = Domain.Entities.Catalog.Module;
 
-namespace Application.Contracts.Repositories.Catalog;
+namespace Application.Interfaces.Repositories.Catalog;
 
 public interface IModuleRepository
 {

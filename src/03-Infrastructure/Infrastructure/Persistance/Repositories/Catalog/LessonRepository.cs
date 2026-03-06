@@ -1,10 +1,10 @@
 ﻿using System.Data;
-using Application.Contracts.Repositories.Catalog;
 using Application.Contracts.UnitOfWork;
+using Application.Interfaces.Repositories.Catalog;
 using Dapper;
 using Domain.Entities.Catalog;
 
-namespace Infrastructure.Repositories.Catalog;
+namespace Infrastructure.Persistance.Repositories.Catalog;
 
 public class LessonRepository : ILessonRepository
 {

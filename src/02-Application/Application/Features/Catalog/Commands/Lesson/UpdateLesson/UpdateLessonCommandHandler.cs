@@ -1,6 +1,6 @@
-﻿using Application.Contracts.Repositories.Catalog;
-using Application.Contracts.UnitOfWork;
+﻿using Application.Contracts.UnitOfWork;
 using Application.Features.Catalog.Responses;
+using Application.Interfaces.Repositories.Catalog;
 using AutoMapper;
 using Domain.Commom;
 using MediatR;

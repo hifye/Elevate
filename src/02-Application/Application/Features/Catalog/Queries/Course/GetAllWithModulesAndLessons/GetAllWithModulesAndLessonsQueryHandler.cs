@@ -1,18 +1,13 @@
-﻿using Application.Contracts.Repositories.Catalog;
-using Application.Features.Catalog.Responses;
+﻿using Application.Features.Catalog.Responses;
+using Application.Interfaces.Repositories.Catalog;
 using MediatR;
 
 namespace Application.Features.Catalog.Queries.Course.GetAllWithModulesAndLessons;
 
-public class GetAllWithModulesAndLessonsQueryHandler : IRequestHandler<GetAllWithModulesAndLessonsQuery, IEnumerable<CourseResponse>>
+public class GetAllWithModulesAndLessonsQueryHandler(ICourseRepository courseRepository)
+    : IRequestHandler<GetAllWithModulesAndLessonsQuery, IEnumerable<CourseResponse>>
 {
-    private readonly ICourseRepository _courseRepository;
-
-    public GetAllWithModulesAndLessonsQueryHandler(ICourseRepository courseRepository)
-        => _courseRepository = courseRepository;
-
-
     public Task<IEnumerable<CourseResponse>> Handle(GetAllWithModulesAndLessonsQuery request,
         CancellationToken cancellationToken)
-        => _courseRepository.GetAllWithModulesAndLessons();
+        => courseRepository.GetAllWithModulesAndLessons();
 }

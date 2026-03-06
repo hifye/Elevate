@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.Auth;
 using Domain.ValuesObjects;
 
-namespace Application.Contracts.Repositories.Auth;
+namespace Application.Interfaces.Repositories.Auth;
 
 public interface IUserRepository
 {
