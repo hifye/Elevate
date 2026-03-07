@@ -1,4 +1,4 @@
-﻿using Application.Features.Learning.Commands.Create;
+﻿using Application.Features.Learning.Commands.CreateEnrollment;
 using AutoMapper;
 using Domain.Entities.Learning;
 

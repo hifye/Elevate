@@ -1,5 +1,6 @@
-﻿using MediatR;
+﻿using Domain.Commom;
+using MediatR;
 
 namespace Application.Features.Catalog.Queries.Course.GetById;
 
-public record GetByIdQuery(Guid Id) : IRequest<Domain.Entities.Catalog.Course>;
+public record GetByIdQuery(Guid Id) : IRequest<Result<Domain.Entities.Catalog.Course>>;

@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<Argon2Hasher>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<ITokenService, JwtTokenService>();
         
         services.AddScoped<IDbConnection>(_ =>
             new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")));

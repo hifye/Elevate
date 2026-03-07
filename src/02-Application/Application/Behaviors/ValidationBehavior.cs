@@ -9,14 +9,10 @@ namespace Application.Behaviors;
 /// </summary>
 /// <typeparam name="TRequest">O tipo da requisição sendo processada.</typeparam>
 /// <typeparam name="TResponse">O tipo da resposta do manipulador associado à requisição.</typeparam>
-public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
-        => _validators = validators;
-
-
     /// <summary>
     /// Método responsável por executar o comportamento de validação no pipeline do MediatR.
     /// Valida o objeto de requisição com base nos validadores configurados, lançando uma exceção caso sejam encontradas falhas de validação.
@@ -29,11 +25,11 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        if (_validators.Any())
+        if (validators.Any())
         {
             var context = new ValidationContext<TRequest>(request);
             var results = await Task.WhenAll(
-                _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+                validators.Select(v => v.ValidateAsync(context, cancellationToken)));
 
             var failures = results
                     .SelectMany(r => r.Errors)

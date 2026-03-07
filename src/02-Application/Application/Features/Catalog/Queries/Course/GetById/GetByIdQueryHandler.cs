@@ -1,11 +1,18 @@
 ﻿using Application.Interfaces.Repositories.Catalog;
+using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Queries.Course.GetById;
 
-public class GetByIdQueryHandler(ICourseRepository courseRepository)
-    : IRequestHandler<GetByIdQuery, Domain.Entities.Catalog.Course>
+public class GetByIdQueryHandler(ICourseRepository _courseRepository)
+    : IRequestHandler<GetByIdQuery, Result<Domain.Entities.Catalog.Course>>
 {
-    public Task<Domain.Entities.Catalog.Course> Handle(GetByIdQuery query, CancellationToken cancellationToken)
-        => courseRepository.GetById(query.Id);
+    public async Task<Result<Domain.Entities.Catalog.Course>> Handle(GetByIdQuery query, CancellationToken cancellationToken)
+    {
+        var course = await _courseRepository.GetById(query.Id);
+        if (course == null || query.Id != course.Id)
+            return Result<Domain.Entities.Catalog.Course>.Failure("Course not found");
+        
+        return Result<Domain.Entities.Catalog.Course>.Success(course);
+    }
 }

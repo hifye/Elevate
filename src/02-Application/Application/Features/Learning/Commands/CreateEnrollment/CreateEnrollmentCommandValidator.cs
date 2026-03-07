@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Features.Learning.Commands.Create;
+namespace Application.Features.Learning.Commands.CreateEnrollment;
 
 public class CreateEnrollmentCommandValidator : AbstractValidator<CreateEnrollmentCommand>
 {

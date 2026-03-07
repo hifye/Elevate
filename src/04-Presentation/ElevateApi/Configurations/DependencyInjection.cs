@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using ElevateApi.Exceptions;
+using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace ElevateApi.Configurations;
 
@@ -8,6 +10,10 @@ public static class DependencyInjection
     {
         services.AddControllers();
         services.AddEndpointsApiExplorer();
+        services.AddExceptionHandler<ValidationExceptionHandler>();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
+        
         services.AddSwaggerGen(opt =>
         {
             opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -34,6 +40,7 @@ public static class DependencyInjection
                 }
             });
         });
+        
         return services;
     }
 }

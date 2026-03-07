@@ -67,13 +67,13 @@ public class EnrollmentRepository : IEnrollmentRepository
     /// Obtém todas as matrículas de um estudante específico.
     /// </summary>
     /// <param name="userId">
-    /// Identificador único do estudante cujas matrículas devem ser recuperadas.
+    ///     Identificador único do estudante cujas matrículas devem ser recuperadas.
     /// </param>
     /// <returns>
     /// Um objeto do tipo <c>StudentResponse</c> representando o estudante, incluindo suas matrículas associadas.
     /// Retorna <c>null</c> se o estudante não for encontrado ou se não houver matrículas associadas.
     /// </returns>
-    public async Task<StudentResponse> GetAllEnrollmentByStudentId(Guid userId)
+    public async Task<IEnumerable<StudentResponse>> GetAllEnrollmentByStudentId(Guid userId)
     {
         var studentDictionary = new Dictionary<Guid, StudentResponse>();
 
@@ -103,7 +103,7 @@ public class EnrollmentRepository : IEnrollmentRepository
             },
             splitOn: "CourseId",
             param: new { UserId = userId });
-        return studentDictionary.Values.FirstOrDefault()!;
+        return studentDictionary.Values;
     }
 
     public async Task Create(Enrollment enrollment) => await _contextDapper.ExecuteAsync(

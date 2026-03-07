@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using Domain.Commom;
+using MediatR;
 using CourseResponse = Application.Features.Catalog.Responses.CourseResponse;
 
 namespace Application.Features.Catalog.Queries.Course.GetAllCoursesByAllInstructors;
 
-public record GetAllCoursesByAllInstructorsQuery : IRequest<IEnumerable<CourseResponse>>;
+public record GetAllCoursesByAllInstructorsQuery : IRequest<Result<IEnumerable<CourseResponse>>>;

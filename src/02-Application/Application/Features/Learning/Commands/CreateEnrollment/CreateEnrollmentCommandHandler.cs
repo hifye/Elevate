@@ -6,7 +6,7 @@ using Domain.Commom;
 using Domain.Entities.Learning;
 using MediatR;
 
-namespace Application.Features.Learning.Commands.Create;
+namespace Application.Features.Learning.Commands.CreateEnrollment;
 
 public class CreateEnrollmentCommandHandler(IEnrollmentRepository enrollmentRepository, IUnitOfWork unitOfWork, IMapper mapper)
     : IRequestHandler<CreateEnrollmentCommand, Result<EnrollmentResponse>>
