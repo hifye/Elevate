@@ -12,7 +12,7 @@ public class GetByInstructorIdQueryHandler(ICourseRepository _courseRepository)
     {
         var instructor = await _courseRepository.GetByInstructorId(query.InstructorId);
         if(instructor == null || query.InstructorId != instructor.InstructorId)
-            return Result<CourseResponse>.Failure("Instructor not found");
+            return Result<CourseResponse>.Failure("Instructor not found", "Not Found");
 
         return Result<CourseResponse>.Success(instructor);
     }

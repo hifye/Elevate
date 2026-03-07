@@ -12,7 +12,7 @@ public class GetAllCoursesByAllInstructorsQueryHandler(ICourseRepository courseR
     {
         var courses =  await courseRepository.GetAllCoursesByAllInstructors();
         if (courses == null || !courses.Any())
-            return Result<IEnumerable<CourseResponse>>.Failure("Courses not found");
+            return Result<IEnumerable<CourseResponse>>.Failure("Courses not found", "Not Found");
         
         return Result<IEnumerable<CourseResponse>>.Success(courses);
     }

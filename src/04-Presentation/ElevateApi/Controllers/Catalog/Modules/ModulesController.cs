@@ -2,6 +2,7 @@
 using Application.Features.Catalog.Commands.Course.UpdateCourse;
 using Application.Features.Catalog.Commands.Module.CreateModule;
 using Application.Features.Catalog.Responses;
+using ElevateApi.Commom.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,23 +15,26 @@ public class ModulesController(IMediator mediator) : ControllerBase
     private readonly IMediator _mediator = mediator;
 
     [HttpPost(Name = "CreateModule")]
-    public async Task<ActionResult<CourseResponse>> CreateModule(CreateModuleCommand command)
+    public async Task<ActionResult> CreateModule(CreateModuleCommand command)
     {
         var result = await _mediator.Send(command);
-        return result.IsFailure ? BadRequest(result.Error) : Ok(result.Value);
+        return result.ToActionResult();
     }
 
     [HttpPut(Name = "UpdateModule")]
     public async Task<ActionResult> UpdateModule(UpdateCourseCommand command)
     {
         var result = await _mediator.Send(command);
-        return result.IsFailure ? NotFound(result.Error) : Ok();
+        return result.ToActionResult();
     }
 
     [HttpDelete(Name = "DeleteModule")]
     public async Task<ActionResult> DeleteModule(DeleteCourseCommand command)
     {
         var result = await _mediator.Send(command);
-        return result.IsFailure ? NotFound(result.Error) : NoContent();
+        if (result.IsSuccess)
+            NoContent();
+        
+        return result.ToActionResult();
     }
 }

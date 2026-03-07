@@ -1,8 +1,8 @@
 ﻿using System.Data;
-using Application.Contracts.UnitOfWork;
 using Application.Features.Auth.Responses;
 using Application.Features.Learning.Responses;
 using Application.Interfaces.Repositories.Learning;
+using Application.Interfaces.UnitOfWork;
 using Dapper;
 using Domain.Entities.Learning;
 

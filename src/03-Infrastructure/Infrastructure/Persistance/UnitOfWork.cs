@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using Application.Contracts.UnitOfWork;
+using Application.Interfaces.UnitOfWork;
 
 namespace Infrastructure.Persistance;
 

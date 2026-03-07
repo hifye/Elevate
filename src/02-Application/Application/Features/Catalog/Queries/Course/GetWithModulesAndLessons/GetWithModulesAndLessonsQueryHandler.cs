@@ -12,7 +12,7 @@ public class GetWithModulesAndLessonsQueryHandler(ICourseRepository _courseRepos
     {
         var course = await _courseRepository.GetWithModulesAndLessons(query.Id);
         if (course == null || query.Id != course.Id)  
-                return Result<CourseResponse>.Failure("Course not found");
+                return Result<CourseResponse>.Failure("Course not found", "Not Found");
         
         return Result<CourseResponse>.Success(course);
     }

@@ -11,7 +11,7 @@ public class GetByIdQueryHandler(IModuleRepository _moduleRepository)
     {
         var module = await _moduleRepository.GetById(query.Id);
             if (module == null || module.Id != query.Id)
-                return Result<Domain.Entities.Catalog.Module>.Failure("Module not found");
+                return Result<Domain.Entities.Catalog.Module>.Failure("Module not found", "Not Found");
             
         return Result<Domain.Entities.Catalog.Module>.Success(module);
     }

@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Application.Contracts.UnitOfWork;
+namespace Application.Interfaces.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {

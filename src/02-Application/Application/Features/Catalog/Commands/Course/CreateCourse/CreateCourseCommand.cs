@@ -8,4 +8,4 @@ public record CreateCourseCommand(
     string Title, 
     string Description, 
     decimal Price, 
-    Guid InstructorId) : IRequest<Result<CourseResponse>>;
+    Guid InstructorId) : IRequest<Result>;

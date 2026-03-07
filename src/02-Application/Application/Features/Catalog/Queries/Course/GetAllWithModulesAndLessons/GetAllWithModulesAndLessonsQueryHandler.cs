@@ -13,7 +13,7 @@ public class GetAllWithModulesAndLessonsQueryHandler(ICourseRepository _courseRe
     {
         var courses = await _courseRepository.GetAllWithModulesAndLessons();
         if (courses == null || !courses.Any())
-            return Result<IEnumerable<CourseResponse>>.Failure("Courses not found");
+            return Result<IEnumerable<CourseResponse>>.Failure("Courses not found", "Not Found");
         
         return Result<IEnumerable<CourseResponse>>.Success(courses);
     }

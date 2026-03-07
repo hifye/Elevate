@@ -8,4 +8,4 @@ public record UpdateLessonCommand(
     int Id,
     string Title,
     string VideoUrl,
-    int OrderNumber) : IRequest<Result<LessonResponse>>;
+    int OrderNumber) : IRequest<Result>;

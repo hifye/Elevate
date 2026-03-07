@@ -8,4 +8,4 @@ public record CreateEnrollmentCommand(
     Guid UserId,
     Guid CourseId,
     DateTime EnrolledAt
-    ) : IRequest<Result<EnrollmentResponse>>;
+    ) : IRequest<Result>;

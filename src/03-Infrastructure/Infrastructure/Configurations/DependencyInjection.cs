@@ -1,10 +1,10 @@
 ﻿using System.Data;
 using System.Text;
-using Application.Contracts.UnitOfWork;
 using Application.Interfaces.Repositories.Auth;
 using Application.Interfaces.Repositories.Catalog;
 using Application.Interfaces.Repositories.Learning;
 using Application.Interfaces.Services;
+using Application.Interfaces.UnitOfWork;
 using Infrastructure.Persistance;
 using Infrastructure.Persistance.Repositories.Auth;
 using Infrastructure.Persistance.Repositories.Catalog;

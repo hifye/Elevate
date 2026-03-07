@@ -11,7 +11,7 @@ public class GetUserByEmailQueryHandler(IUserRepository _userRepository) : IRequ
     {
         var user = await _userRepository.GetUserByEmail(query.Email);
             if (user == null || user.Email != query.Email)
-                return Result<User>.Failure("User not found");
+                return Result<User>.Failure("User not found", "Not Found");
 
         return Result<User>.Success(user);
     }

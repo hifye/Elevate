@@ -1,5 +1,5 @@
-﻿using Application.Contracts.UnitOfWork;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Interfaces.Repositories.Catalog;
+using Application.Interfaces.UnitOfWork;
 using Domain.Commom;
 using MediatR;
 
@@ -13,6 +13,10 @@ public class DeleteLessonCommandHandler(ILessonRepository lessonRepository, IUni
 
     public async Task<Result> Handle(DeleteLessonCommand command, CancellationToken cancellationToken)
     {
+        var lesson = await _lessonRepository.GetById(command.Id);
+        if (lesson == null)
+            return Result.Failure("Lesson not found", "Not Found");
+        
         await _lessonRepository.Delete(command.Id);
         await _unitOfWork.CommitAsync();
         return Result.Success();

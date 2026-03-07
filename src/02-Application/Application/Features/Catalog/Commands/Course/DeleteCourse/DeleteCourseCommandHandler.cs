@@ -1,29 +1,21 @@
-﻿using Application.Contracts.UnitOfWork;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Interfaces.Repositories.Catalog;
+using Application.Interfaces.UnitOfWork;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Commands.Course.DeleteCourse;
 
-public class DeleteCourseCommandHandler : IRequestHandler<DeleteCourseCommand, Result>
+public class DeleteCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<DeleteCourseCommand, Result>
 {
-    #region Dependencies
-    
-    private readonly ICourseRepository _courseRepository;
-        private readonly IUnitOfWork _unitOfWork;
-    
-        public DeleteCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork)
-        {
-            _courseRepository = courseRepository;
-            _unitOfWork = unitOfWork;
-        }
-    
-    #endregion
-    
     public async Task<Result> Handle(DeleteCourseCommand command, CancellationToken cancellationToken)
     {
-        await _courseRepository.Delete(command.Id);
-        await _unitOfWork.CommitAsync();
+        var course = await courseRepository.GetById(command.Id);
+        if (course == null)
+            return Result.Failure("Course not found", "Not Found");
+        
+        await courseRepository.Delete(command.Id);
+        await unitOfWork.CommitAsync();
         return Result.Success();
     }
 }

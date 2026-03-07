@@ -11,7 +11,7 @@ public class GetByIdQueryHandler(ILessonRepository lessonRepository)
     {
         var lesson = await lessonRepository.GetById(query.Id);
         if (lesson == null || query.Id != lesson.Id)
-            return Result<Domain.Entities.Catalog.Lesson>.Failure("Lesson not found");
+            return Result<Domain.Entities.Catalog.Lesson>.Failure("Lesson not found", "Not Found");
         
         return Result<Domain.Entities.Catalog.Lesson>.Success(lesson);
     }

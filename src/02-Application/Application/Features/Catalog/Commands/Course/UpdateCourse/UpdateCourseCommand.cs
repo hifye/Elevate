@@ -8,4 +8,4 @@ public record UpdateCourseCommand(
     Guid Id,
     string Title,
     string Description,
-    decimal Price) : IRequest<Result<CourseResponse>>;
+    decimal Price) : IRequest<Result>;

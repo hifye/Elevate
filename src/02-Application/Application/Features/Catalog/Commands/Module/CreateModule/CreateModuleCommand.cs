@@ -7,4 +7,4 @@ namespace Application.Features.Catalog.Commands.Module.CreateModule;
 public record CreateModuleCommand(
         Guid CourseId,
         string Title,
-        int OrderNumber) : IRequest<Result<ModuleResponse>>;
+        int OrderNumber) : IRequest<Result>;

@@ -8,4 +8,4 @@ public record CreateLessonCommand(
     int ModuleId,
     string Title,
     string VideoUrl,
-    int OrderNumber) : IRequest<Result<LessonResponse>>;
+    int OrderNumber) : IRequest<Result>;

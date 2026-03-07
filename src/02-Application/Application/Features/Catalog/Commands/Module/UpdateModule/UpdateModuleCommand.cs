@@ -7,4 +7,4 @@ namespace Application.Features.Catalog.Commands.Module.UpdateModule;
 public record UpdateModuleCommand(
     int Id,
     string Title,
-    int OrderNumber) : IRequest<Result<ModuleResponse>>;
+    int OrderNumber) : IRequest<Result>;

@@ -1,17 +1,18 @@
-﻿﻿namespace Domain.Commom;
+﻿namespace Domain.Commom;
 
 /// <summary>
 /// Representa o resultado de uma operação, podendo ser um sucesso ou uma falha.
 /// </summary>
-public class Result(bool isSuccess, string? error)
+public class Result(bool isSuccess, string? error, string? code = null!)
 {
-    private bool IsSuccess { get; } = isSuccess; 
+    public bool IsSuccess { get; } = isSuccess; 
     public bool IsFailure => !IsSuccess;
-    public string? Error { get; } = error; 
+    public string? Error { get; } = error;
+    public string? ErrorCode { get; set; } = code;
 
     public static Result Success() => new Result(true, null);
 
-    public static Result Failure(string error) => new(false, error);
+    public static Result Failure(string error, string code = null!) => new(false, error, code);
 
     /// <summary>
     /// Encadeia a execução de outra função que retorna um <see cref="Result"/> ou <see cref="Result{T}"/>.
@@ -90,7 +91,7 @@ public class Result(bool isSuccess, string? error)
     public static Result Try(Action action, string errorMessage)
     {
         try { action(); return Success(); }
-        catch { return Failure(errorMessage); }
+        catch { return Failure(errorMessage, "Internal Server Error"); }
     }
 }
 
@@ -98,15 +99,15 @@ public class Result<T> : Result
 {
     public T? Value { get; }
 
-    public Result(bool isSuccess, string? error, T? value)
-        : base(isSuccess, error)
+    public Result(bool isSuccess, string? error, string? code, T? value)
+        : base(isSuccess, error, code)
     {
         Value = value;
     }
 
-    public static Result<T> Success(T value) => new(true, null, value);
+    public static Result<T> Success(T value) => new(true, null, string.Empty, value);
 
-    public new static Result<T> Failure(string error) => new(false, error, default);
+    public new static Result<T> Failure(string error, string code = null!) => new(false, error, code, default);
 
     /// <summary>
     /// Encadeia a execução de outra função que retorna um <see cref="Result"/>.

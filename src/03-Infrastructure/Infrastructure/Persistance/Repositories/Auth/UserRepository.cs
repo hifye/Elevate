@@ -1,6 +1,6 @@
 ﻿using System.Data;
-using Application.Contracts.UnitOfWork;
 using Application.Interfaces.Repositories.Auth;
+using Application.Interfaces.UnitOfWork;
 using Dapper;
 using Domain.Entities.Auth;
 using Domain.ValuesObjects;
