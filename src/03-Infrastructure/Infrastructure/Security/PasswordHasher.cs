@@ -1,62 +1,101 @@
-﻿using Application.Interfaces.Services;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Application.Interfaces.Services;
+using Konscious.Security.Cryptography;
 
 namespace Infrastructure.Security;
 
 /// <summary>
-/// Classe responsável por realizar operações de hash e validação de senhas
-/// utilizando o algoritmo Argon2id com parâmetros configuráveis.
+/// Classe responsável por realizar o hash de senhas e verificar se uma senha corresponde ao hash armazenado,
+/// utilizando o algoritmo Argon2id.
 /// </summary>
-public class PasswordHasher(Argon2Hasher argon2Hasher) : IPasswordHasher
+public class PasswordHasher : IPasswordHasher
 {
-    private readonly Argon2Hasher _argon2 = argon2Hasher;
+    private const int SaltSize = 32;
+    private const int HashSize = 32;
+    private const int Iterations = 4;
+    private const int Memory = 65536;
+    private const int Parallelism = 8;
 
     /// <summary>
-    /// Gera um hash de uma senha utilizando o algoritmo Argon2id com parâmetros padrão.
+    /// Gera um hash seguro para a senha fornecida utilizando o algoritmo Argon2id.
     /// </summary>
     /// <param name="password">
-    /// Uma string representando a senha que será utilizada para gerar o hash.
+    /// A senha em texto puro que será utilizada para gerar o hash.
     /// </param>
     /// <returns>
-    /// Uma string contendo o hash gerado no formato "argon2id$iterações$memória$paralelismo$salt$hash",
-    /// onde cada valor é separado pelo caractere "$".
+    /// Retorna uma string representando o hash da senha, no formato
+    /// "argon2id$iterações$memória$paralelismo$salt$hash".
     /// </returns>
     public string HashPassword(string password)
     {
-        var result = _argon2.Hash(password);
+        var salt = RandomNumberGenerator.GetBytes(SaltSize);
+
+        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
+        {
+            Salt = salt,
+            Iterations = Iterations,
+            MemorySize = Memory,
+            DegreeOfParallelism = Parallelism
+        };
+
+        var hash = argon2.GetBytes(HashSize);
 
         return string.Join("$", "argon2id",
-            Argon2Hasher.DefaultIterations,
-            Argon2Hasher.DefaultMemory,
-            Argon2Hasher.DefaultParallelism,
-            Convert.ToBase64String(result.Salt), result.Hash);
+            Iterations,
+            Memory,
+            Parallelism,
+            Convert.ToBase64String(salt),
+            Convert.ToBase64String(hash)
+        );
     }
 
     /// <summary>
-    /// Verifica se uma senha fornecida corresponde ao hash armazenado utilizando o algoritmo Argon2id.
+    /// Verifica se a senha fornecida corresponde ao hash armazenado utilizando o algoritmo Argon2id.
     /// </summary>
     /// <param name="password">
-    /// Uma string representando a senha que será verificada.
+    /// A senha em texto puro que será verificada.
     /// </param>
     /// <param name="hashedPassword">
-    /// Uma string contendo o hash da senha armazenado no formato "argon2id$iterações$memória$paralelismo$salt$hash".
+    /// O hash previamente armazenado no formato "argon2id$iterações$memória$paralelismo$salt$hash".
     /// </param>
     /// <returns>
-    /// Um valor booleano indicando se a senha fornecida corresponde ao hash armazenado.
-    /// Retorna true se as credenciais coincidem; caso contrário, retorna false.
+    /// Retorna verdadeiro se a senha fornecida corresponde ao hash armazenado.
+    /// Caso contrário, retorna falso.
     /// </returns>
     public bool VerifyPassword(string password, string hashedPassword)
     {
         var parts = hashedPassword.Split("$");
         if (parts.Length != 6)
             return false;
+        
+        if (parts[0] != "argon2id")
+            return false;
 
-        var iterations = int.Parse(parts[1]);
-        var memory = int.Parse(parts[2]);
-        var parallelism = int.Parse(parts[3]);
-        var salt = Convert.FromBase64String(parts[4]);
-        var hash = Convert.FromBase64String(parts[5]);
+        try
+        {
+            var iterations = int.Parse(parts[1]);
+            var memory = int.Parse(parts[2]);
+            var parallelism = int.Parse(parts[3]);
+            var salt = Convert.FromBase64String(parts[4]);
+            var expectedHash = Convert.FromBase64String(parts[5]);
 
-        return _argon2.Verify(password, salt, hash, iterations, memory, parallelism);
+            var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))
+            {
+                Salt = salt,
+                Iterations = iterations,
+                MemorySize = memory,
+                DegreeOfParallelism = parallelism
+            };
+            
+            var computedHash = argon2.GetBytes(expectedHash.Length);
+            
+            return CryptographicOperations.FixedTimeEquals(expectedHash, computedHash);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -74,13 +113,16 @@ public class PasswordHasher(Argon2Hasher argon2Hasher) : IPasswordHasher
         var parts = hashedPassword.Split("$");
         if (parts.Length != 6)
             return false;
+        
+        if (parts[0] != "argon2id")
+            return false;
 
         var iterations = int.Parse(parts[1]);
         var memory = int.Parse(parts[2]);
         var parallelism = int.Parse(parts[3]);
 
-        return iterations < Argon2Hasher.DefaultIterations 
-               || memory < Argon2Hasher.DefaultMemory 
-               || parallelism < Argon2Hasher.DefaultParallelism;
+        return iterations < Iterations || iterations > Iterations
+               || memory < Memory || memory > Memory
+               || parallelism < Parallelism || parallelism > Parallelism;
     }
 }

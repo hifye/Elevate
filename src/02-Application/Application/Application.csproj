@@ -16,7 +16,6 @@
 
     <ItemGroup>
       <Folder Include="Features\Catalog\Commands\Course\" />
-      <Folder Include="Features\Catalog\Queries\Course\" />
     </ItemGroup>
 
     <ItemGroup>

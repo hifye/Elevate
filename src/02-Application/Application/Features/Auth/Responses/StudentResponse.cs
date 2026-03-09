@@ -3,7 +3,7 @@ using Domain.ValuesObjects;
 
 namespace Application.Features.Auth.Responses;
 
-public record StudentResponse(Guid Id, string Name, Email Email)
+public record StudentResponse(Guid StudentId, string StudentName, Email StudentEmail)
 {
     public List<EnrollmentResponse> Enrollments { get; init; } = [];
 }

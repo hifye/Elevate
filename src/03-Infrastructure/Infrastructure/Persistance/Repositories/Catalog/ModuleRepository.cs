@@ -1,67 +1,35 @@
 ﻿using System.Data;
+using Application.Features.Catalog.Responses;
 using Application.Interfaces.Repositories.Catalog;
 using Application.Interfaces.UnitOfWork;
 using Dapper;
+using Infrastructure.Persistance.Dapper.Queries.Module;
 using Module = Domain.Entities.Catalog.Module;
 
 namespace Infrastructure.Persistance.Repositories.Catalog;
 
-public class ModuleRepository : IModuleRepository
+public class ModuleRepository(IDbConnection contextDapper, IUnitOfWork unitOfWork) : IModuleRepository
 {
-    #region Dependencies
+	public Task<IEnumerable<ModuleResponse>> GetModulesAndLessons()
+		=> contextDapper.QueryAsync<ModuleResponse>(ModuleQueries.GetModulesAndLessons);
+
+	public async Task<Module> GetById(int id)
+		=> (await contextDapper.QueryFirstOrDefaultAsync<Module>(ModuleQueries.GetById, new { Id = id }))!;
+	
+    public async Task Create(Module module) 
+	    => await contextDapper.ExecuteAsync(ModuleQueries.Create,new { module.CourseId, module.Title, module.OrderNumber });
     
-    private readonly IDbConnection _contextDapper;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ModuleRepository(IDbConnection contextDapper, IUnitOfWork unitOfWork)
-    {
-	    _contextDapper = contextDapper;
-	    _unitOfWork = unitOfWork;
-    }
-
-    #endregion
-
-    public async Task<Module> GetById(int id) => (await _contextDapper.QueryFirstOrDefaultAsync<Module>(
-													@"select id as Id,
-														  course_id as CourseId,
-														   	  title as Title,
-														order_number as OrderNumber
-														from catalog.modules
-														where id = @Id", new { Id = id }))!;
-    
-	    
-
-    public async Task Create(Module module) => await _contextDapper.ExecuteAsync(
-                                            @"insert into catalog.modules(course_id, title, order_number)
-                                                  values(@CourseId, @Title, @OrderNumber)",
-                                            new
-                                            {
-	                                            module.CourseId, 
-	                                            module.Title, 
-	                                            module.OrderNumber
-                                            });
-
     public async Task<bool> Update(Module module)
     {
-	   var rowsAffected = await _contextDapper.ExecuteAsync(
-										@"update catalog.modules
-											set title = @Title,
-											order_number = @OrderNumber,
-											where id = @Id",
-										new
-										{
-											module.Title, 
-											module.OrderNumber, 
-											module.Id
-										}, _unitOfWork.Transaction);
+	   var rowsAffected = 
+		   await contextDapper.ExecuteAsync(
+			   ModuleQueries.Update, new { module.Title, module.OrderNumber, module.Id }, unitOfWork.Transaction);
 	   return rowsAffected > 0;
-
     }
+    
     public async Task<bool> Delete(int id)
     {
-	    var rowsAffected = await _contextDapper.ExecuteAsync(
-						       @"delete from catalog.modules
-								   	   where id = @Id", new { Id = id }, _unitOfWork.Transaction);
+	    var rowsAffected = await contextDapper.ExecuteAsync(ModuleQueries.Delete, new { Id = id }, unitOfWork.Transaction);
 	    return rowsAffected > 0;
     }
 }

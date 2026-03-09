@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace Application.Behaviors;
 
 public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
-    : IPipelineBehavior<TRequest, TResponse>
+    : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     /// <summary>
     /// Manipula a execução de uma solicitação dentro de um pipeline, registrando informações de log antes, durante e após o processamento.

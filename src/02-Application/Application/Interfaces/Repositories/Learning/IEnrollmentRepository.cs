@@ -6,7 +6,7 @@ namespace Application.Interfaces.Repositories.Learning;
 public interface IEnrollmentRepository
 {
     Task<IEnumerable<StudentResponse>> GetAllEnrollmentsByStudents();
-    Task<IEnumerable<StudentResponse>> GetAllEnrollmentByStudentId(Guid userId);
+    Task<Enrollment?> GetById(Guid userId);
     Task Create(Enrollment enrollment);
     Task<bool> Delete(Guid userId);
 }

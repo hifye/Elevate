@@ -1,10 +1,9 @@
-﻿using Application.Features.Catalog.Commands.Course.CreateCourse;
+﻿using Application.Features.Auth.Responses;
+using Application.Features.Catalog.Commands.Course.CreateCourse;
 using Application.Features.Catalog.Commands.Course.DeleteCourse;
 using Application.Features.Catalog.Commands.Course.UpdateCourse;
-using Application.Features.Catalog.Queries.Course.GetAllCoursesByAllInstructors;
-using Application.Features.Catalog.Queries.Course.GetAllWithModulesAndLessons;
-using Application.Features.Catalog.Queries.Course.GetByInstructorId;
-using Application.Features.Catalog.Queries.Course.GetWithModulesAndLessons;
+using Application.Features.Catalog.Queries.Course.GetAll;
+using Application.Features.Catalog.Queries.Course.GetInstructorByName;
 using Application.Features.Catalog.Responses;
 using ElevateApi.Commom.Extensions;
 using MediatR;
@@ -16,54 +15,57 @@ namespace ElevateApi.Controllers.Catalog.Course;
 [Route("api/[controller]")]
 public class CoursesController(Mediator mediator) : ControllerBase
 {
-    private readonly Mediator _mediator = mediator;
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CourseResponse>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet(Name = "GetAllCourses")]
+    public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAllCourses()
+    {
+        var result = await mediator.Send(new GetAllQuery());
+        return result.ToActionResult();
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CourseResponse>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("GetCoursesByTitle/{title}", Name = "GetCoursesByTitle")]
+    public async Task<ActionResult<IEnumerable<CourseResponse>>> GetCoursesByTitle(string title)
+    {
+        var result = await mediator.Send(new GetInstructorByNameQuery(title));
+        return result.ToActionResult();
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InstructorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("{name}", Name = "GetInstructorByName")]
+    public async Task<ActionResult<InstructorResponse>> GetInstructorByName(string name)
+    {
+        var result = await mediator.Send(new GetInstructorByNameQuery(name));
+        return result.ToActionResult();
+    }
     
-    [HttpGet(Name = "GetAllCoursesWithAllInstructors")]
-    public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAllCoursesByAllInstructors()
-    {
-        var result = await _mediator.Send(new GetAllCoursesByAllInstructorsQuery());
-        return result.ToActionResult();
-    }
-
-    [HttpGet("modulesAndLessons" ,Name = "GetAllWithModulesAndLessons")]
-    public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAllWithModulesAndLessons()
-    {
-        var result = await _mediator.Send(new GetAllWithModulesAndLessonsQuery());
-        return result.ToActionResult();
-    }
-
-    [HttpGet("instructor/{id:guid}", Name = "GetByInstructorId")]
-    public async Task<ActionResult<CourseResponse>> GetByInstructorId(Guid id)
-    {
-        var result = await _mediator.Send(new GetByInstructorIdQuery(id));
-        return result.ToActionResult();
-    }
-    
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<CourseResponse>> GetWithModulesAndLessons(Guid id)
-    {
-        var result = await _mediator.Send(new GetWithModulesAndLessonsQuery(id));
-        return result.ToActionResult();
-    }
-
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPost(Name = "CreateCourse")]
     public async Task<ActionResult> CreateCourse(CreateCourseCommand command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return result.ToActionResult();
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut(Name = "UpdateCourse")]
     public async Task<ActionResult> UpdateCourse(UpdateCourseCommand command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return result.ToActionResult();
     }
 
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpDelete(Name = "DeleteCourse")]
     public async Task<ActionResult> DeleteCourse(DeleteCourseCommand command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         if (result.IsSuccess)
             NoContent();
         

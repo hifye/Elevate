@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Application.Features.Catalog.Commands.Module.CreateModule;
 
-public class CreateModuleCommandHandler(IModuleRepository moduleRepository, IUnitOfWork unitOfWork, IMapper mapper)
+public class CreateModuleCommandHandler(IModuleRepository moduleRepository, IUnitOfWork unitOfWork)
     : IRequestHandler<CreateModuleCommand, Result>
 {
     /// <summary>

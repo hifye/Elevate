@@ -13,8 +13,6 @@ namespace Infrastructure.Security;
 
 public class JwtTokenService(IConfiguration configuration) : ITokenService
 {
-    private readonly IConfiguration _configuration = configuration;
-    
     public TokenResult Token(User user)
     {
         var claims = CreateClaims(user);
@@ -42,14 +40,14 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
     private string CreateJwtToken(List<Claim> claims, DateTime tokenExpiration)
     {
         var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)
+            Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)
         );
         
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         
         var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],
-            _configuration["Jwt:Audience"],
+            configuration["Jwt:Issuer"],
+            configuration["Jwt:Audience"],
             claims: claims,
             expires: tokenExpiration,
             signingCredentials: creds
@@ -74,9 +72,9 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = _configuration["Jwt:Issuer"],
-            ValidAudience = _configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!))
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
         };
         
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -86,13 +84,13 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
 
     public DateTime TokenExpiration()
     {
-        _ = int.TryParse(_configuration["Jwt:ExpirationInMinutes"], out var expirationInMinutes);
+        _ = int.TryParse(configuration["Jwt:ExpirationInMinutes"], out var expirationInMinutes);
         return DateTime.UtcNow.AddDays(expirationInMinutes == 0 ? 1 : expirationInMinutes);
     }
 
     public DateTime RefreshTokenExpiration()
     {
-        _ = int.TryParse(_configuration["Jwt:RefreshTokenExpirationInDays"], out var expirationInDays);
+        _ = int.TryParse(configuration["Jwt:RefreshTokenExpirationInDays"], out var expirationInDays);
         return DateTime.UtcNow.AddDays(expirationInDays == 0 ? 7 : expirationInDays);
     }
 }

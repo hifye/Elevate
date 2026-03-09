@@ -9,6 +9,7 @@ using Infrastructure.Persistance;
 using Infrastructure.Persistance.Repositories.Auth;
 using Infrastructure.Persistance.Repositories.Catalog;
 using Infrastructure.Persistance.Repositories.Learning;
+using Infrastructure.Persistance.UnitOfWork;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +29,6 @@ public static class DependencyInjection
         services.AddScoped<IModuleRepository, ModuleRepository>();
         services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<Argon2Hasher>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ITokenService, JwtTokenService>();
         

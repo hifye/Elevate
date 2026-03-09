@@ -11,15 +11,13 @@ namespace ElevateApi.Controllers.Auth;
 [Route("api/[controller]")]
 public class AuthController(IMediator mediator) : ControllerBase
 {
-   private readonly IMediator _mediator = mediator;
-
    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
    [ProducesResponseType(StatusCodes.Status400BadRequest)]
    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
    [HttpPost(Name = "Login")]
    public async Task<ActionResult<TokenResponse>> Login(LoginCommand command)
    {
-      var result = await _mediator.Send(command);
+      var result = await mediator.Send(command);
       return result.ToActionResult();
    }
    
@@ -29,7 +27,7 @@ public class AuthController(IMediator mediator) : ControllerBase
    [HttpPost("register", Name = "Register")]
    public async Task<ActionResult> Register(RegisterCommand command)
    {
-      var result = await _mediator.Send(command);
+      var result = await mediator.Send(command);
       return result.ToActionResult();
    }
 }

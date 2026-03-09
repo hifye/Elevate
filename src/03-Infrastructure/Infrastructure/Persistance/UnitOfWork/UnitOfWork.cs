@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Application.Interfaces.UnitOfWork;
 
-namespace Infrastructure.Persistance;
+namespace Infrastructure.Persistance.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork
 {

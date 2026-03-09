@@ -9,7 +9,7 @@ public class User
     public int RoleId { get; private set; }
     public string Name { get; private set; }
     public Email Email { get; private set; }
-    public string PasswordHash { get; private set; }
+    public string PasswordHash { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiresAt { get; set; }
 
@@ -37,4 +37,7 @@ public class User
             .Bind(() => Email.Create(email))
             .Map(validEmail => new User(roleId, name, validEmail, passwordHash));
     }
+
+    private User()
+    { }
 }

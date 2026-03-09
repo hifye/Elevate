@@ -1,69 +1,39 @@
 ﻿using System.Data;
+using Application.Features.Catalog.Responses;
 using Application.Interfaces.Repositories.Catalog;
 using Application.Interfaces.UnitOfWork;
 using Dapper;
 using Domain.Entities.Catalog;
+using Infrastructure.Persistance.Dapper.Queries.Lesson;
 
 namespace Infrastructure.Persistance.Repositories.Catalog;
 
-public class LessonRepository : ILessonRepository
+public class LessonRepository(IDbConnection contextDapper, IUnitOfWork unitOfWork) : ILessonRepository
 {
-    #region Dependencies
-    
-    private readonly IDbConnection _contextDapper;
-    private readonly IUnitOfWork _unitOfWork;
-    
-    public LessonRepository(IDbConnection contextDapper, IUnitOfWork unitOfWork)
-    {
-	    _contextDapper = contextDapper;
-	    _unitOfWork = unitOfWork;
-    }
-    
-    #endregion
+    public async Task<IEnumerable<LessonResponse>> GetAllLessons()
+        => await contextDapper.QueryAsync<LessonResponse>(LessonQueries.GetAllLessons);
 
-    public async Task<Lesson> GetById(int id) => (await _contextDapper.QueryFirstOrDefaultAsync<Lesson>(
-											    @"select id as Id,
-	   												  module_id as ModuleId,
-	   													  title as Title,
-	   												  video_url as VideoUrl,
-	   											   order_number as OrderNumber
-												   from catalog.lessons
-												   where id = @Id", new { Id = id }))!;
+    public async Task<Lesson> GetById(int id)
+        => (await contextDapper.QueryFirstOrDefaultAsync<Lesson>(LessonQueries.GetById, new { Id = id }))!;
 
-    public async Task Create(Lesson lesson) => await _contextDapper.ExecuteAsync(
-										   @"insert into catalog.lessons(module_id, title, video_url, order_number)
-                    							values(@ModuleId, @Title, @VideoUrl, @OrderNumber", 
-										   new
-										   {
-											   lesson.ModuleId, 
-											   lesson.Title, 
-											   lesson.VideoUrl, 
-											   lesson.OrderNumber
-										   }, _unitOfWork.Transaction);
+    public async Task Create(Lesson lesson) => await contextDapper.ExecuteAsync(
+        LessonQueries.Create, new { lesson.ModuleId, lesson.Title, lesson.VideoUrl, lesson.OrderNumber },
+        unitOfWork.Transaction);
 
     public async Task<bool> Update(Lesson lesson)
     {
-	   var rowsAffected = await  _contextDapper.ExecuteAsync(
-								@"update catalog.lessons
-										set title = @Title ,
-										    video_url = @VideoUrl,
-										order_number = @OrderNumber
-									where id = @Id", 
-								new
-								{
-									lesson.Title, 
-									lesson.VideoUrl,
-									lesson.OrderNumber,
-									lesson.Id
-								}, _unitOfWork.Transaction);
-	   return rowsAffected > 0;
-
+        var rowsAffected =
+            await contextDapper.ExecuteAsync(
+                LessonQueries.Update, new { lesson.Title, lesson.VideoUrl, lesson.OrderNumber, lesson.Id },
+                unitOfWork.Transaction);
+        return rowsAffected > 0;
     }
+
     public async Task<bool> Delete(int id)
     {
-		var rowsAffected =  await _contextDapper.ExecuteAsync(
-							@"delete from catalog.lessons 
-       								where id = @Id", new { Id = id }, _unitOfWork.Transaction);
-		return rowsAffected > 0;
+        var rowsAffected = 
+            await contextDapper.ExecuteAsync(
+                LessonQueries.Delete ,new { Id = id }, unitOfWork.Transaction);
+        return rowsAffected > 0;
     }
 }

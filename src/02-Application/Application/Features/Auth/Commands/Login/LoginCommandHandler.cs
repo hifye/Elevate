@@ -20,11 +20,18 @@ public class LoginCommandHandler(IUserRepository userRepository, IUnitOfWork uni
         var login = await userRepository.GetUserByEmail(user.Value!);
         if (login == null)
             return Result<TokenResponse>.Failure("Invalid Credentials", "Unauthorized");
-
-        passwordHasher.NeedsRehash(command.Password);
+        
         var passwordValid = passwordHasher.VerifyPassword(command.Password, login.PasswordHash);
         if (!passwordValid)
             return Result<TokenResponse>.Failure("Invalid Credentials", "Unauthorized");
+
+        if (passwordHasher.NeedsRehash(login.PasswordHash))
+        {
+            var newHash = passwordHasher.HashPassword(command.Password);
+            
+            login.PasswordHash = newHash;
+            await userRepository.UpdatePassword(login.Id, newHash);
+        }
         
         var tokenResult = tokenService.Token(login);
 

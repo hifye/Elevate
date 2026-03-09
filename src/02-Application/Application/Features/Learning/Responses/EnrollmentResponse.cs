@@ -1,3 +1,3 @@
 ﻿namespace Application.Features.Learning.Responses;
 
-public record EnrollmentResponse(Guid UserId, int CourseId, DateTime EnrolledAt);
+public record EnrollmentResponse(Guid StudentId, int CourseId, DateTime EnrolledAt);

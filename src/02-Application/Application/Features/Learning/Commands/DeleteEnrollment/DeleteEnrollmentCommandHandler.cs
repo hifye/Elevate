@@ -10,6 +10,10 @@ public class DeleteEnrollmentCommandHandler(IEnrollmentRepository enrollmentRepo
 {
     public Task<Result> Handle(DeleteEnrollmentCommand command, CancellationToken cancellationToken)
     {
+        var result = enrollmentRepository.GetById(command.UserId);
+        if (result == null)
+            return Task.FromResult(Result.Failure("Enrollment not found", "Not Found"));       
+        
         enrollmentRepository.Delete(command.UserId);
         unitOfWork.CommitAsync();
         return Task.FromResult(Result.Success());

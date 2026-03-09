@@ -1,6 +1,7 @@
 ﻿using Application.Features.Catalog.Commands.Course.DeleteCourse;
 using Application.Features.Catalog.Commands.Course.UpdateCourse;
 using Application.Features.Catalog.Commands.Module.CreateModule;
+using Application.Features.Catalog.Queries.Module.GetModulesAndLessons;
 using Application.Features.Catalog.Responses;
 using ElevateApi.Commom.Extensions;
 using MediatR;
@@ -12,26 +13,31 @@ namespace ElevateApi.Controllers.Catalog.Modules;
 [Route("api/[controller]")]
 public class ModulesController(IMediator mediator) : ControllerBase
 {
-    private readonly IMediator _mediator = mediator;
-
+    [HttpGet(Name = "GetAllModulesAndLessons")]
+    public async Task<ActionResult<IEnumerable<ModuleResponse>>> GetAllModulesAndLessons()
+    {
+        var result = await mediator.Send(new GetModulesAndLessonsQuery());
+        return result.ToActionResult();
+    }
+    
     [HttpPost(Name = "CreateModule")]
     public async Task<ActionResult> CreateModule(CreateModuleCommand command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return result.ToActionResult();
     }
 
     [HttpPut(Name = "UpdateModule")]
     public async Task<ActionResult> UpdateModule(UpdateCourseCommand command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         return result.ToActionResult();
     }
 
     [HttpDelete(Name = "DeleteModule")]
     public async Task<ActionResult> DeleteModule(DeleteCourseCommand command)
     {
-        var result = await _mediator.Send(command);
+        var result = await mediator.Send(command);
         if (result.IsSuccess)
             NoContent();
         

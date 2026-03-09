@@ -20,7 +20,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         {
             Title = "Internal Server Error",
             Status = StatusCodes.Status500InternalServerError,
-            Type = "http://httpstatuses.com/500"
+            Type = "https://httpstatuses.com/500"
         };
         
         httpContext.Response.StatusCode = problem.Status.Value;

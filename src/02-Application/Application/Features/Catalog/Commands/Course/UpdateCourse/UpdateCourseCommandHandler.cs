@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Application.Features.Catalog.Commands.Course.UpdateCourse;
 
-public class UpdateCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork, IMapper mapper)
+public class UpdateCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateCourseCommand, Result>
 {
     
