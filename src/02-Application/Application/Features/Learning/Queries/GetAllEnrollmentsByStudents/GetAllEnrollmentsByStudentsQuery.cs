@@ -1,8 +1,8 @@
 ﻿using Application.Features.Auth.Responses;
-using Application.Features.Learning.Responses;
+using Application.Features.Learning.ListItem;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Learning.Queries.GetAllEnrollmentsByStudents;
 
-public record GetAllEnrollmentsByStudentsQuery : IRequest<Result<IEnumerable<StudentResponse>>>;
+public record GetAllEnrollmentsByStudentsQuery : IRequest<Result<IEnumerable<StudentListItem>>>;

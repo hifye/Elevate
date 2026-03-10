@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories.Auth;
+﻿using Application.Abstraction.Persistance.Repositories.Auth;
 using Domain.Commom;
 using Domain.Entities.Auth;
 using MediatR;

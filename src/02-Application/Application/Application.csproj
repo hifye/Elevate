@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\Catalog\Commands\Course\" />
+      <Folder Include="Abstraction\Persistance\" />
     </ItemGroup>
 
     <ItemGroup>

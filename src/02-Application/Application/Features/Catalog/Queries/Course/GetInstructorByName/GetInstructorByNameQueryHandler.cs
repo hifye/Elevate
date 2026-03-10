@@ -1,19 +1,21 @@
-﻿using Application.Features.Auth.Responses;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Persistance.Repositories.Catalog;
+using Application.Abstraction.Queries;
+using Application.Features.Auth.Responses;
+using Application.Features.Catalog.ListItem;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Queries.Course.GetInstructorByName;
 
-public class GetInstructorByNameQueryHandler(ICourseRepository courseRepository)
-    : IRequestHandler<GetInstructorByNameQuery, Result<InstructorResponse>>
+public class GetInstructorByNameQueryHandler(ICourseQueries courseQueries)
+    : IRequestHandler<GetInstructorByNameQuery, Result<InstructorListItem>>
 {
-    public async Task<Result<InstructorResponse>> Handle(GetInstructorByNameQuery query, CancellationToken cancellationToken)
+    public async Task<Result<InstructorListItem>> Handle(GetInstructorByNameQuery query, CancellationToken cancellationToken)
     {
-        var instructor = await courseRepository.GetInstructorByName(query.Name);
+        var instructor = await courseQueries.GetInstructorByName(query.Name);
         if(instructor == null)
-            return Result<InstructorResponse>.Failure("Instructor not found", "Not Found");
+            return Result<InstructorListItem>.Failure("Instructor not found", "Not Found");
 
-        return Result<InstructorResponse>.Success(instructor);
+        return Result<InstructorListItem>.Success(instructor);
     }
 }

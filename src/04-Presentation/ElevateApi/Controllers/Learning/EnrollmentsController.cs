@@ -1,6 +1,7 @@
 ﻿using Application.Features.Auth.Responses;
 using Application.Features.Learning.Commands.CreateEnrollment;
 using Application.Features.Learning.Commands.DeleteEnrollment;
+using Application.Features.Learning.ListItem;
 using Application.Features.Learning.Queries.GetAllEnrollmentsByStudents;
 using ElevateApi.Commom.Extensions;
 using MediatR;
@@ -12,10 +13,10 @@ namespace ElevateApi.Controllers.Learning;
 [Route("api/[controller]")]
 public class EnrollmentsController(IMediator mediator) : ControllerBase
 {
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentResponse>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentListItem>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("GetAllEnrollmentsByStudents", Name = "GetAllEnrollmentsByStudents")]
-    public async Task<ActionResult<IEnumerable<StudentResponse>>> GetAllEnrollmentsByStudents()
+    public async Task<ActionResult<IEnumerable<StudentListItem>>> GetAllEnrollmentsByStudents()
     {
         var result = await mediator.Send(new GetAllEnrollmentsByStudentsQuery());
         return result.ToActionResult();

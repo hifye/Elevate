@@ -1,7 +1,5 @@
-﻿using Application.Features.Learning.Responses;
-using Application.Interfaces.Repositories.Learning;
+﻿using Application.Abstraction.Persistance.Repositories.Learning;
 using Application.Interfaces.UnitOfWork;
-using AutoMapper;
 using Domain.Commom;
 using Domain.Entities.Learning;
 using MediatR;

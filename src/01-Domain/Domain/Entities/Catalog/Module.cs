@@ -16,15 +16,61 @@ public class Module
         OrderNumber = orderNumber;
     }
     
+    protected Module() { }
+    
     public Result Update(int id, string title, int orderNumber)
     {
         return Guard.AgainstOutOfRange(id < 1, "Id must be greater than 0")
-                .Bind(() => Guard.AgainstNullOrWhiteSpace(title, "O titulo não pode ser nulo"))
-                .Bind(() => title.Length > 100
-                    ? Result.Failure("Title cannot be longer than 100 characters.")
-                    : Result.Success())
-                .Bind(() => Guard.AgainstOutOfRange(orderNumber < 1, "Order Number must be greater than 0"))
-                .Map(() => (Title = title, OrderNumber = orderNumber));
+            .Bind(() => Guard.AgainstNullOrWhiteSpace(title, "O titulo não pode ser nulo"))
+            .Bind(() => title.Length > 100
+                ? Result.Failure("Title cannot be longer than 100 characters.")
+                : Result.Success())
+            .Bind(() => Guard.AgainstOutOfRange(orderNumber < 1, "Order Number must be greater than 0"))
+            .Bind(() =>
+            {
+                Title = title;
+                OrderNumber = orderNumber;
+                return Result.Success();
+            });
+    }
+
+    public Result ApplyPatch(string? title, int? orderNumber)
+    {
+        if (title is not null)
+        {
+            var result = UpdateTitle(title);
+            if (result.IsFailure)
+                return result;
+        }
+        
+        if (orderNumber is not null)
+        {
+            var result = UpdateOrderNumber(orderNumber.Value);
+        }
+        return Result.Success();      
+    }
+
+    public Result UpdateTitle(string title)
+    {
+        return Guard.AgainstNullOrWhiteSpace(title, "Title cannot be null")
+            .Bind(() => title.Length > 100
+                ? Result.Failure("Title cannot be longer than 100 characters.")
+                : Result.Success())
+            .Bind(() =>
+            {
+                Title = title;
+                return Result.Success();
+            });   
+    }
+
+    public Result UpdateOrderNumber(int orderNumber)
+    {
+        return Guard.AgainstOutOfRange(orderNumber < 1, "Order Number must be greater than 0")
+            .Bind(() =>
+            {
+                OrderNumber = orderNumber;
+                return Result.Success();
+            });  
     }
 
     public static Result<Module> Create(Guid courseId, string title, int orderNumber)

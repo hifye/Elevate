@@ -1,5 +1,4 @@
-﻿using Application.Features.Catalog.Responses;
-using Domain.Commom;
+﻿using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Commands.Lesson.UpdateLesson;

@@ -1,6 +1,5 @@
 ﻿using Domain.Commom;
 using MediatR;
-using CourseResponse = Application.Features.Catalog.Responses.CourseResponse;
 
 namespace Application.Features.Catalog.Commands.Course.CreateCourse;
 

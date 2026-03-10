@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Persistance.Repositories.Catalog;
 using Application.Interfaces.UnitOfWork;
 using Domain.Commom;
 using MediatR;
@@ -10,11 +10,10 @@ public class DeleteLessonCommandHandler(ILessonRepository lessonRepository, IUni
 {
     public async Task<Result> Handle(DeleteLessonCommand command, CancellationToken cancellationToken)
     {
-        var lesson = await lessonRepository.GetById(command.Id);
-        if (lesson == null)
+        var deleted = await lessonRepository.Delete(command.Id);
+        if (!deleted)
             return Result.Failure("Lesson not found", "Not Found");
         
-        await lessonRepository.Delete(command.Id);
         await unitOfWork.CommitAsync();
         return Result.Success();
     }

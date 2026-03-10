@@ -1,19 +1,19 @@
-﻿using Application.Features.Catalog.Responses;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Queries;
+using Application.Features.Catalog.ListItem;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Queries.Module.GetModulesAndLessons;
 
-public class GetModulesAndLessonsQueryHandler(IModuleRepository moduleRepository)
-    : IRequestHandler<GetModulesAndLessonsQuery, Result<IEnumerable<ModuleResponse>>>
+public class GetModulesAndLessonsQueryHandler(IModuleQueries moduleQueries)
+    : IRequestHandler<GetModulesAndLessonsQuery, Result<IEnumerable<ModuleListItem>>>
 {
-    public async Task<Result<IEnumerable<ModuleResponse>>> Handle(GetModulesAndLessonsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<ModuleListItem>>> Handle(GetModulesAndLessonsQuery request, CancellationToken cancellationToken)
     {
-        var modules = await moduleRepository.GetModulesAndLessons();
+        var modules = await moduleQueries.GetModulesAndLessons();
         if(modules == null || !modules.Any())
-            return Result<IEnumerable<ModuleResponse>>.Failure("Modules not found", "Not Found");
+            return Result<IEnumerable<ModuleListItem>>.Failure("Modules not found", "Not Found");
         
-        return Result<IEnumerable<ModuleResponse>>.Success(modules);
+        return Result<IEnumerable<ModuleListItem>>.Success(modules);
     }
 }

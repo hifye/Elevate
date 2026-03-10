@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories.Auth;
+﻿using Application.Abstraction.Persistance.Repositories.Auth;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using Domain.Commom;

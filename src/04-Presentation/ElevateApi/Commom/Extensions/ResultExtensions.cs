@@ -12,7 +12,7 @@ public static class ResultExtensions
 
         return result.ErrorCode switch
         {
-            "NotFound" => new NotFoundObjectResult(result.Error),
+            "Not Found" => new NotFoundObjectResult(result.Error),
             "Unauthorized" => new UnauthorizedObjectResult(result.Error),
             "Conflict" => new ConflictObjectResult(result.Error),
             _ => new BadRequestObjectResult(result.Error)
@@ -26,7 +26,7 @@ public static class ResultExtensions
 
         return result.ErrorCode switch
         {
-            "NotFound" => new NotFoundObjectResult(result.Error),
+            "Not Found" => new NotFoundObjectResult(result.Error),
             "Unauthorized" => new UnauthorizedObjectResult(result.Error),
             "Conflict" => new ConflictObjectResult(result.Error),
             _ => new BadRequestObjectResult(result.Error)

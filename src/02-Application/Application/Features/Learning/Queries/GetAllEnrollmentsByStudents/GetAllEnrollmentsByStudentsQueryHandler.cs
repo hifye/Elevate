@@ -1,21 +1,20 @@
-﻿using Application.Features.Auth.Responses;
-using Application.Features.Learning.Responses;
-using Application.Interfaces.Repositories.Learning;
+﻿using Application.Abstraction.Queries;
+using Application.Features.Learning.ListItem;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Learning.Queries.GetAllEnrollmentsByStudents;
 
-public class GetAllEnrollmentsByStudentsQueryHandler(IEnrollmentRepository enrollmentRepository)
-    : IRequestHandler<GetAllEnrollmentsByStudentsQuery, Result<IEnumerable<StudentResponse>>>
+public class GetAllEnrollmentsByStudentsQueryHandler(IEnrollmentQueries enrollmentQueries)
+    : IRequestHandler<GetAllEnrollmentsByStudentsQuery, Result<IEnumerable<StudentListItem>>>
 {
-    public async Task<Result<IEnumerable<StudentResponse>>> Handle(GetAllEnrollmentsByStudentsQuery query,
+    public async Task<Result<IEnumerable<StudentListItem>>> Handle(GetAllEnrollmentsByStudentsQuery query,
         CancellationToken cancellationToken)
     {
-        var enrollments = await enrollmentRepository.GetAllEnrollmentsByStudents();
+        var enrollments = await enrollmentQueries.GetAllEnrollmentsByStudents();
         if (enrollments == null || !enrollments.Any())
-            return Result<IEnumerable<StudentResponse>>.Failure("Students not found", "Not Found");
+            return Result<IEnumerable<StudentListItem>>.Failure("Students not found", "Not Found");
         
-        return Result<IEnumerable<StudentResponse>>.Success(enrollments);
+        return Result<IEnumerable<StudentListItem>>.Success(enrollments);
     }
 }

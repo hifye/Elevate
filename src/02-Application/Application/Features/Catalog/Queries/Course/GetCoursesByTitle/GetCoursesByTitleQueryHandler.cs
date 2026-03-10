@@ -1,19 +1,19 @@
-﻿using Application.Features.Catalog.Responses;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Queries;
+using Application.Features.Catalog.ListItem;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Queries.Course.GetCoursesByTitle;
 
-public class GetCoursesByTitleQueryHandler(ICourseRepository courseRepository)
-    : IRequestHandler<GetCoursesByTitleQuery, Result<IEnumerable<CourseResponse>>>
+public class GetCoursesByTitleQueryHandler(ICourseQueries courseQueries)
+    : IRequestHandler<GetCoursesByTitleQuery, Result<IEnumerable<CourseListItem>>>
 {
-    public async Task<Result<IEnumerable<CourseResponse>>> Handle(GetCoursesByTitleQuery query, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<CourseListItem>>> Handle(GetCoursesByTitleQuery query, CancellationToken cancellationToken)
     {
-        var courses = await courseRepository.GetCoursesByTitle(query.Title);
+        var courses = await courseQueries.GetCoursesByTitle(query.Title);
         if(courses == null || !courses.Any())
-            return Result<IEnumerable<CourseResponse>>.Failure("Course not found", "Not Found");
+            return Result<IEnumerable<CourseListItem>>.Failure("Course not found", "Not Found");
 
-        return Result<IEnumerable<CourseResponse>>.Success(courses);
+        return Result<IEnumerable<CourseListItem>>.Success(courses);
     }
 }

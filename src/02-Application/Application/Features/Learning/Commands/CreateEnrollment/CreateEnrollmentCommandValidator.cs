@@ -8,11 +8,8 @@ public class CreateEnrollmentCommandValidator : AbstractValidator<CreateEnrollme
     {
         RuleFor(x => x.CourseId)
             .NotEmpty().WithMessage("CourseId is required");
-        
+
         RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("UserId is required");
-        
-        RuleFor(x => x.EnrolledAt)
-            .NotEmpty().WithMessage("EnrolledAt is required");       
     }
 }

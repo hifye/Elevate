@@ -1,5 +1,5 @@
-﻿using Application.Features.Auth.Responses;
-using Application.Interfaces.Repositories.Auth;
+﻿using Application.Abstraction.Persistance.Repositories.Auth;
+using Application.Features.Auth.Responses;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using Domain.Commom;

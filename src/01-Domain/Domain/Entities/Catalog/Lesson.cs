@@ -17,6 +17,8 @@ public class Lesson
         VideoUrl = videoUrl;
         OrderNumber = orderNumber;
     }
+    
+    protected Lesson() { }
 
     public Result Update(int id, string title, string videoUrl, int orderNumber)
     {
@@ -31,7 +33,13 @@ public class Lesson
                             ? Result.Failure("Video Url cannot be longer than 300 characters.")
                             : Result.Success()))
             .Bind(() => Guard.AgainstOutOfRange(orderNumber < 1, "Order Number must be greater than 0"))
-            .Map(() => (Title = title, VideoUrl = videoUrl, OrderNumber = orderNumber));
+            .Bind(() =>
+            {
+                Title = title;
+                VideoUrl = videoUrl;
+                OrderNumber = orderNumber;
+                return Result.Success();
+            });
     }
     
     public static Result<Lesson> Create(

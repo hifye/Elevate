@@ -1,7 +1,5 @@
-﻿using Application.Features.Catalog.Responses;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Persistance.Repositories.Catalog;
 using Application.Interfaces.UnitOfWork;
-using AutoMapper;
 using Domain.Commom;
 using MediatR;
 

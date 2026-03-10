@@ -1,4 +1,5 @@
-﻿using Application.Features.Catalog.Responses;
+﻿using Application.Features.Catalog.ListItem;
+using Application.Features.Catalog.Queries.Lesson.GetAllLessons;
 using Dapper;
 using Infrastructure.Configurations.TypeHandlers;
 
@@ -10,6 +11,5 @@ public static class DapperConfiguration
     {
         SqlMapper.AddTypeHandler(new EmailTypeHandler());
         SqlMapper.AddTypeHandler(new PriceTypeHandler());
-        SqlMapper.AddTypeHandler(new JsonTypeHandler<LessonResponse>());
     }
 }

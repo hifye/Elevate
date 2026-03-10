@@ -1,7 +1,5 @@
-﻿using Application.Features.Catalog.Responses;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Persistance.Repositories.Catalog;
 using Application.Interfaces.UnitOfWork;
-using AutoMapper;
 using Domain.Commom;
 using MediatR;
 
@@ -15,7 +13,7 @@ public class CreateCourseCommandHandler(ICourseRepository courseRepository, IUni
         var result = Domain.Entities.Catalog.Course.Create(command.Title, command.Description, command.Price, command.InstructorId);
         
         if(result.IsFailure)
-            return Result<CourseResponse>.Failure(result.Error!);
+            return Result.Failure(result.Error!);
         
         await courseRepository.Create(result.Value!);
         await unitOfWork.CommitAsync();

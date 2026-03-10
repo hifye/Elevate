@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Persistance.Repositories.Catalog;
 using Domain.Commom;
 using MediatR;
 

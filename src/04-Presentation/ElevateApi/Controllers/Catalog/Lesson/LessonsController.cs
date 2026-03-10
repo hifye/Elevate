@@ -1,8 +1,8 @@
 ﻿using Application.Features.Catalog.Commands.Lesson.CreateLesson;
 using Application.Features.Catalog.Commands.Lesson.DeleteLesson;
 using Application.Features.Catalog.Commands.Lesson.UpdateLesson;
+using Application.Features.Catalog.ListItem;
 using Application.Features.Catalog.Queries.Lesson.GetAllLessons;
-using Application.Features.Catalog.Responses;
 using ElevateApi.Commom.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +13,10 @@ namespace ElevateApi.Controllers.Catalog.Lesson;
 [Route("api/[controller]")]
 public class LessonsController(IMediator mediator) : ControllerBase
 {
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LessonResponse>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LessonListItem>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("GetAll", Name = "GetAllLessons")]
-    public async Task<ActionResult<IEnumerable<LessonResponse>>> GetAllLessons()
+    public async Task<ActionResult<IEnumerable<LessonListItem>>> GetAllLessons()
     {
         var result = await mediator.Send(new GetAllLessonsQuery());
         return result.ToActionResult();
@@ -46,6 +46,6 @@ public class LessonsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult> DeleteLesson(DeleteLessonCommand command)
     {
         var result = await mediator.Send(command);
-        return result.ToActionResult();
+        return result.ToActionResult();      
     }
 }

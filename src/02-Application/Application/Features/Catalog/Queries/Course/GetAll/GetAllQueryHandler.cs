@@ -1,19 +1,19 @@
-﻿using Application.Features.Catalog.Responses;
-using Application.Interfaces.Repositories.Catalog;
+﻿using Application.Abstraction.Queries;
+using Application.Features.Catalog.ListItem;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Catalog.Queries.Course.GetAll;
 
-public class GetAllQueryHandler(ICourseRepository courseRepository)
-    : IRequestHandler<GetAllQuery, Result<IEnumerable<CourseResponse>>>
+public class GetAllQueryHandler(ICourseQueries courseQueries)
+    : IRequestHandler<GetAllQuery, Result<IEnumerable<CourseListItem>>>
 {
-    public async Task<Result<IEnumerable<CourseResponse>>> Handle(GetAllQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<CourseListItem>>> Handle(GetAllQuery request, CancellationToken cancellationToken)
     {
-        var courses = await courseRepository.GetAll();
+        var courses = await courseQueries.GetAll();
         if(courses == null || !courses.Any())
-            return Result<IEnumerable<CourseResponse>>.Failure("Courses not found", "Not Found");
+            return Result<IEnumerable<CourseListItem>>.Failure("Courses not found", "Not Found");
 
-        return Result<IEnumerable<CourseResponse>>.Success(courses);
+        return Result<IEnumerable<CourseListItem>>.Success(courses);
     }
 }

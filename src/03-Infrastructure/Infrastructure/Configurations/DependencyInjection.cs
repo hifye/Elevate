@@ -1,10 +1,12 @@
 ﻿using System.Data;
 using System.Text;
-using Application.Interfaces.Repositories.Auth;
-using Application.Interfaces.Repositories.Catalog;
-using Application.Interfaces.Repositories.Learning;
+using Application.Abstraction.Persistance.Repositories.Auth;
+using Application.Abstraction.Persistance.Repositories.Catalog;
+using Application.Abstraction.Persistance.Repositories.Learning;
+using Application.Abstraction.Queries;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
+using Infrastructure.Data.Queries;
 using Infrastructure.Persistance;
 using Infrastructure.Persistance.Repositories.Auth;
 using Infrastructure.Persistance.Repositories.Catalog;
@@ -28,6 +30,10 @@ public static class DependencyInjection
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<IModuleRepository, ModuleRepository>();
         services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+        services.AddScoped<IModuleQueries, ModuleQueries>();
+        services.AddScoped<ICourseQueries, CourseQueries>();
+        services.AddScoped<ILessonQueries, LessonQueries>();
+        services.AddScoped<IEnrollmentQueries, EnrollmentQueries>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ITokenService, JwtTokenService>();
