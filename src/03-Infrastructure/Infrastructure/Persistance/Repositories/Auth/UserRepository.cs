@@ -4,7 +4,7 @@ using Application.Interfaces.UnitOfWork;
 using Dapper;
 using Domain.Entities.Auth;
 using Domain.ValuesObjects;
-using Infrastructure.Persistance.Dapper.Queries.Auth;
+using Infrastructure.Data.Queries.Auth;
 
 namespace Infrastructure.Persistance.Repositories.Auth;
 
@@ -24,4 +24,14 @@ public class UserRepository(IDbConnection contextDapper, IUnitOfWork unitOfWork)
     public async Task UpdatePassword(Guid userId, string newHash)
 	    => await contextDapper.ExecuteAsync(AuthQueries.UpdatePassword,
 		    new { UserId = userId, PasswordHash = newHash });
+
+    public Task UpdateRefreshToken(User user)
+		=> contextDapper.ExecuteAsync(AuthQueries.UpdateRefreshToken, user, unitOfWork.Transaction);
+
+    public async Task<bool> Logout(Guid id)
+    {
+	    var rowsAffected = 
+		    await contextDapper.ExecuteAsync(AuthQueries.Logout, new { Id = id }, unitOfWork.Transaction);
+	    return rowsAffected > 0;
+    }
 }

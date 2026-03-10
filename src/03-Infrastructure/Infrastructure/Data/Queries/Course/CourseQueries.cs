@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Persistance.Dapper.Queries.Course;
+﻿namespace Infrastructure.Data.Queries.Course;
 
 public static class CourseQueries
 {
@@ -6,7 +6,8 @@ public static class CourseQueries
                                  select id as CourseId,
                                  title as CourseTitle,
                                  description as CourseDescription,
-                                 price as CoursePrice
+                                 price as CoursePrice,
+                                 instructor_id as InstructorId
                                  from catalog.courses
                                  """;
 
@@ -14,16 +15,18 @@ public static class CourseQueries
                                             select id as CourseId,
                                             title as CourseTitle,
                                             description as CourseDescription,
-                                            price as CoursePrice
+                                            price as CoursePrice,
+                                            instructor_id as InstructorId
                                             from catalog.courses
-                                            where title = @CourseTitle
+                                            where title = @Title
                                             """;
 
     public const string GetInstructorByName = """
-                                              select name as InstructorName,
+                                              select id as InstructorId,
+                                              name as InstructorName,
                                               email as InstructorEmail
                                               from auth.users
-                                              where name = @InstructorName and role_id = @RoleId
+                                              where name = @Name
                                               """;
 
     public const string GetById = """

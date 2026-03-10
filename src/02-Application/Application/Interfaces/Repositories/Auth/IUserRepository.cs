@@ -9,4 +9,6 @@ public interface IUserRepository
     Task<User> GetUserById(Guid id);
     Task CreateUser(User user);
     Task UpdatePassword(Guid id, string newHash);
+    Task UpdateRefreshToken(User user);
+    Task<bool> Logout(Guid id);
 }

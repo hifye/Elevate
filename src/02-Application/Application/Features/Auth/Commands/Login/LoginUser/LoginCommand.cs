@@ -2,6 +2,6 @@
 using Domain.Commom;
 using MediatR;
 
-namespace Application.Features.Auth.Commands.Login;
+namespace Application.Features.Auth.Commands.Login.LoginUser;
 
 public record LoginCommand(string Email, string Password) : IRequest<Result<TokenResponse>>;

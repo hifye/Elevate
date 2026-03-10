@@ -3,6 +3,7 @@ using Application.Features.Catalog.Commands.Course.CreateCourse;
 using Application.Features.Catalog.Commands.Course.DeleteCourse;
 using Application.Features.Catalog.Commands.Course.UpdateCourse;
 using Application.Features.Catalog.Queries.Course.GetAll;
+using Application.Features.Catalog.Queries.Course.GetCoursesByTitle;
 using Application.Features.Catalog.Queries.Course.GetInstructorByName;
 using Application.Features.Catalog.Responses;
 using ElevateApi.Commom.Extensions;
@@ -13,11 +14,11 @@ namespace ElevateApi.Controllers.Catalog.Course;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CoursesController(Mediator mediator) : ControllerBase
+public class CoursesController(IMediator mediator) : ControllerBase
 {
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CourseResponse>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet(Name = "GetAllCourses")]
+    [HttpGet("GetAll", Name = "GetAllCourses")]
     public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAllCourses()
     {
         var result = await mediator.Send(new GetAllQuery());
@@ -29,13 +30,13 @@ public class CoursesController(Mediator mediator) : ControllerBase
     [HttpGet("GetCoursesByTitle/{title}", Name = "GetCoursesByTitle")]
     public async Task<ActionResult<IEnumerable<CourseResponse>>> GetCoursesByTitle(string title)
     {
-        var result = await mediator.Send(new GetInstructorByNameQuery(title));
+        var result = await mediator.Send(new GetCoursesByTitleQuery(title));
         return result.ToActionResult();
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InstructorResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet("{name}", Name = "GetInstructorByName")]
+    [HttpGet("GetInstructor/{name}", Name = "GetInstructorByName")]
     public async Task<ActionResult<InstructorResponse>> GetInstructorByName(string name)
     {
         var result = await mediator.Send(new GetInstructorByNameQuery(name));
@@ -48,6 +49,9 @@ public class CoursesController(Mediator mediator) : ControllerBase
     public async Task<ActionResult> CreateCourse(CreateCourseCommand command)
     {
         var result = await mediator.Send(command);
+        if (result.IsSuccess)
+            Created();
+            
         return result.ToActionResult();
     }
 
@@ -57,6 +61,9 @@ public class CoursesController(Mediator mediator) : ControllerBase
     public async Task<ActionResult> UpdateCourse(UpdateCourseCommand command)
     {
         var result = await mediator.Send(command);
+        if (result.IsSuccess)
+            Ok();
+        
         return result.ToActionResult();
     }
 

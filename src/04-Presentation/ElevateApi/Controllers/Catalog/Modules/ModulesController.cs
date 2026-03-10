@@ -13,7 +13,7 @@ namespace ElevateApi.Controllers.Catalog.Modules;
 [Route("api/[controller]")]
 public class ModulesController(IMediator mediator) : ControllerBase
 {
-    [HttpGet(Name = "GetAllModulesAndLessons")]
+    [HttpGet("GetAllModulesWithLessons", Name = "GetAllModulesAndLessons")]
     public async Task<ActionResult<IEnumerable<ModuleResponse>>> GetAllModulesAndLessons()
     {
         var result = await mediator.Send(new GetModulesAndLessonsQuery());

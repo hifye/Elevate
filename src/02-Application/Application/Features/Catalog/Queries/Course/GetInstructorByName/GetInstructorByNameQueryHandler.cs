@@ -11,7 +11,7 @@ public class GetInstructorByNameQueryHandler(ICourseRepository courseRepository)
     public async Task<Result<InstructorResponse>> Handle(GetInstructorByNameQuery query, CancellationToken cancellationToken)
     {
         var instructor = await courseRepository.GetInstructorByName(query.Name);
-        if(string.IsNullOrEmpty(instructor.ToString()))
+        if(instructor == null)
             return Result<InstructorResponse>.Failure("Instructor not found", "Not Found");
 
         return Result<InstructorResponse>.Success(instructor);

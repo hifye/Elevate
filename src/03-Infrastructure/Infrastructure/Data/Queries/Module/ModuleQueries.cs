@@ -1,26 +1,31 @@
-﻿namespace Infrastructure.Persistance.Dapper.Queries.Module;
+﻿namespace Infrastructure.Data.Queries.Module;
 
 public class ModuleQueries
 {
     public const string GetModulesAndLessons = """
-        select m.id as ModuleId,
-               m.course_id as CourseId,
+        select
+            m.id as ModuleId,
+            m.course_id as CourseId,
             m.title as ModuleTitle,
-        	   m.order_number as ModuleOrderNumber,
-        	       
-        			(select json_agg(json_build_object(
-        			       'LessonId', l.id,
-        			       'LessonTitle', l.title,
-        			       'LessonVideoUrl', l.video_url,
-        			       'LessonOrderNumber', l.order_number
-        					)
-        			       order by l.order_number
-        			       )
-        			       from catalog.lessons l
-        			       where l.module_id = m.id
-        			       ) as Lessons
-        			from catalog.modules m
-        			order by m.order_number
+            m.order_number as ModuleOrderNumber,
+            coalesce(
+                (
+                    select json_agg(
+                        json_build_object(
+                            'LessonId', l.id,
+                            'LessonTitle', l.title,
+                            'LessonVideoUrl', l.video_url,
+                            'LessonOrderNumber', l.order_number
+                        )
+                        order by l.order_number
+                    )
+                    from catalog.lessons l
+                    where l.module_id = m.id
+                ),
+                '[]'
+            ) as LessonsJson
+        from catalog.modules m
+        order by m.order_number
         """;
 
     public const string GetById = """
@@ -40,7 +45,7 @@ public class ModuleQueries
                                  values(
                                  @CourseId,
                                  @Title,
-                                 @Number)
+                                 @OrderNumber)
                                  """;
 
     public const string Update = """

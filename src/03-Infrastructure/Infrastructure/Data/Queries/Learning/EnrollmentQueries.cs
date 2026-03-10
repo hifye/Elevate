@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Persistance.Dapper.Queries.Learning;
+﻿namespace Infrastructure.Data.Queries.Learning;
 
 public class EnrollmentQueries
 {

@@ -4,7 +4,7 @@ using Application.Interfaces.Repositories.Learning;
 using Application.Interfaces.UnitOfWork;
 using Dapper;
 using Domain.Entities.Learning;
-using Infrastructure.Persistance.Dapper.Queries.Learning;
+using Infrastructure.Data.Queries.Learning;
 
 namespace Infrastructure.Persistance.Repositories.Learning;
 

@@ -12,7 +12,7 @@ public class GetCoursesByTitleQueryHandler(ICourseRepository courseRepository)
     {
         var courses = await courseRepository.GetCoursesByTitle(query.Title);
         if(courses == null || !courses.Any())
-            return Result<IEnumerable<CourseResponse>>.Failure("Courses not found", "Not Found");
+            return Result<IEnumerable<CourseResponse>>.Failure("Course not found", "Not Found");
 
         return Result<IEnumerable<CourseResponse>>.Success(courses);
     }

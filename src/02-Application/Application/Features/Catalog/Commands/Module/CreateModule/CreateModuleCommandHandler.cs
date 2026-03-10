@@ -10,13 +10,6 @@ namespace Application.Features.Catalog.Commands.Module.CreateModule;
 public class CreateModuleCommandHandler(IModuleRepository moduleRepository, IUnitOfWork unitOfWork)
     : IRequestHandler<CreateModuleCommand, Result>
 {
-    /// <summary>
-    /// Manipula o comando de criação de um módulo, realizando as validações
-    /// e persistindo os dados no repositório correspondente.
-    /// </summary>
-    /// <param name="command">Comando contendo os dados necessários para criar um módulo, como Id do curso, título e número da ordem.</param>
-    /// <param name="cancellationToken">Token para cancelamento de operações assíncronas.</param>
-    /// <returns>Um objeto <see cref="Result{T}"/> contendo a resposta com os dados do módulo criado ou informações de erro em caso de falha.</returns>
     public async Task<Result> Handle(CreateModuleCommand command, CancellationToken cancellationToken)
     {
         var result = Domain.Entities.Catalog.Module.Create(command.CourseId, command.Title, command.OrderNumber);

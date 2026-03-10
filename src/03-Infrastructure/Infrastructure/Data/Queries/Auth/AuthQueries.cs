@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Persistance.Dapper.Queries.Auth;
+﻿namespace Infrastructure.Data.Queries.Auth;
 
 public class AuthQueries
 {
@@ -45,4 +45,18 @@ public class AuthQueries
                                          set password_hash = @PasswordHash
                                          where id = @UserId
                                          """;
+
+    public const string UpdateRefreshToken = """
+                                     update auth.users
+                                     set refresh_token = @RefreshToken,
+                                     refresh_token_expires_at = @RefreshTokenExpiresAt
+                                     where email = @Email
+                                     """;
+
+    public const string Logout = """
+                                     update auth.users
+                                     set refresh_token = null,
+                                     refresh_token_expires_at = null
+                                     where id = @Id
+                                     """;
 }

@@ -10,7 +10,6 @@ namespace Application.Features.Catalog.Commands.Course.UpdateCourse;
 public class UpdateCourseCommandHandler(ICourseRepository courseRepository, IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateCourseCommand, Result>
 {
-    
     public async Task<Result> Handle(UpdateCourseCommand command, CancellationToken cancellationToken)
     {
         var course = await courseRepository.GetById(command.Id);

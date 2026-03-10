@@ -3,7 +3,7 @@ using Application.Features.Catalog.Responses;
 using Application.Interfaces.Repositories.Catalog;
 using Application.Interfaces.UnitOfWork;
 using Dapper;
-using Infrastructure.Persistance.Dapper.Queries.Module;
+using Infrastructure.Data.Queries.Module;
 using Module = Domain.Entities.Catalog.Module;
 
 namespace Infrastructure.Persistance.Repositories.Catalog;

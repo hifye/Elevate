@@ -6,7 +6,7 @@ using Domain.Commom;
 using Domain.ValuesObjects;
 using MediatR;
 
-namespace Application.Features.Auth.Commands.Login;
+namespace Application.Features.Auth.Commands.Login.LoginUser;
 
 public class LoginCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ITokenService tokenService, IPasswordHasher passwordHasher)
     : IRequestHandler<LoginCommand, Result<TokenResponse>>
@@ -43,7 +43,8 @@ public class LoginCommandHandler(IUserRepository userRepository, IUnitOfWork uni
             tokenResult.RefreshToken,
             tokenResult.TokenExpiration,
             tokenResult.RefreshTokenExpiration);
-        
+
+        await userRepository.UpdateRefreshToken(login);
         await unitOfWork.CommitAsync();
         return Result<TokenResponse>.Success(response);
     }

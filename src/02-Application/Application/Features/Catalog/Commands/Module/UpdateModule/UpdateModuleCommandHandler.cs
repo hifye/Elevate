@@ -7,16 +7,12 @@ using MediatR;
 
 namespace Application.Features.Catalog.Commands.Module.UpdateModule;
 
-public class UpdateModuleCommandHandler(IModuleRepository moduleRepository, IUnitOfWork unitOfWork, IMapper mapper)
+public class UpdateModuleCommandHandler(IModuleRepository moduleRepository, IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateModuleCommand, Result>
 {
-    private readonly IModuleRepository _moduleRepository = moduleRepository;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IMapper _mapper = mapper;
-
     public async Task<Result> Handle(UpdateModuleCommand command, CancellationToken cancellationToken)
     {
-        var module = await _moduleRepository.GetById(command.Id);
+        var module = await moduleRepository.GetById(command.Id);
         if (module == null)
             return Result.Failure("Module Not Found", "Not Found");
 
@@ -24,8 +20,8 @@ public class UpdateModuleCommandHandler(IModuleRepository moduleRepository, IUni
         if (result.IsFailure)
             return Result.Failure(result.Error!);
 
-        await _moduleRepository.Update(module);
-        await _unitOfWork.CommitAsync();
+        await moduleRepository.Update(module);
+        await unitOfWork.CommitAsync();
         return Result.Success();
     }
 }

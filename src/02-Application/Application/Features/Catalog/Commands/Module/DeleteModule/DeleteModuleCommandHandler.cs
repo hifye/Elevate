@@ -8,14 +8,14 @@ namespace Application.Features.Catalog.Commands.Module.DeleteModule;
 public class DeleteModuleCommandHandler(IModuleRepository moduleRepository, IUnitOfWork unitOfWork)
     : IRequestHandler<DeleteModuleCommand, Result>
 {
-    public Task<Result> Handle(DeleteModuleCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteModuleCommand command, CancellationToken cancellationToken)
     {
-        var module = moduleRepository.GetById(command.Id);
+        var module = await moduleRepository.GetById(command.Id);
         if (module == null)
-            return Task.FromResult(Result.Failure("Module not found", "Not Found"));
+            return Result.Failure("Module not found", "Not Found");
         
-        moduleRepository.Delete(command.Id);
-        unitOfWork.CommitAsync();
-        return Task.FromResult(Result.Success());
+        await moduleRepository.Delete(command.Id);
+        await unitOfWork.CommitAsync();
+        return Result.Success();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Features.Auth.Commands.Login;
+using Application.Features.Auth.Commands.Login.LoginUser;
 using Application.Features.Auth.Commands.Register;
 using AutoMapper;
 using Domain.Entities.Auth;

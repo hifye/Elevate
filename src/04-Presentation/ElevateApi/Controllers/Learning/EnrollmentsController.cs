@@ -14,7 +14,7 @@ public class EnrollmentsController(IMediator mediator) : ControllerBase
 {
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentResponse>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet(Name = "GetAllEnrollmentsByStudents")]
+    [HttpGet("GetAllEnrollmentsByStudents", Name = "GetAllEnrollmentsByStudents")]
     public async Task<ActionResult<IEnumerable<StudentResponse>>> GetAllEnrollmentsByStudents()
     {
         var result = await mediator.Send(new GetAllEnrollmentsByStudentsQuery());

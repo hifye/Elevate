@@ -5,7 +5,7 @@ using Application.Interfaces.Repositories.Catalog;
 using Application.Interfaces.UnitOfWork;
 using Dapper;
 using Domain.Entities.Catalog;
-using Infrastructure.Persistance.Dapper.Queries.Course;
+using Infrastructure.Data.Queries.Course;
 
 namespace Infrastructure.Persistance.Repositories.Catalog;
 

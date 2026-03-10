@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Persistance.Dapper.Queries.Lesson;
+﻿namespace Infrastructure.Data.Queries.Lesson;
 
 public class LessonQueries
 {
@@ -31,7 +31,7 @@ public class LessonQueries
 	                             @ModuleId, 
 	                             @Title,
 	                             @VideoUrl, 
-	                             @OrderNumber
+	                             @OrderNumber)
 	                             """;
 
 	public const string Update = """
