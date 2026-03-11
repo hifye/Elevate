@@ -7,6 +7,7 @@ using Application.Abstraction.Queries;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using Infrastructure.Data.Queries;
+using Infrastructure.Identity;
 using Infrastructure.Persistance;
 using Infrastructure.Persistance.Repositories.Auth;
 using Infrastructure.Persistance.Repositories.Catalog;
@@ -34,10 +35,12 @@ public static class DependencyInjection
         services.AddScoped<ICourseQueries, CourseQueries>();
         services.AddScoped<ILessonQueries, LessonQueries>();
         services.AddScoped<IEnrollmentQueries, EnrollmentQueries>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<ITokenService, JwtTokenService>();
-        
+        services.AddHttpContextAccessor();
+
         services.AddScoped<IDbConnection>(_ =>
             new NpgsqlConnection(configuration.GetConnectionString("DefaultConnection")));
 
@@ -58,7 +61,7 @@ public static class DependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
                 };
             });
-        
+
         return services;
     }
 }

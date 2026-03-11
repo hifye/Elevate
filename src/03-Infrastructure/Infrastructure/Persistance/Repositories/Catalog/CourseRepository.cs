@@ -21,7 +21,7 @@ public class CourseRepository(IDbConnection contextDapper, IUnitOfWork unitOfWor
                 course.Title,
                 course.Description,
                 course.Price,
-                course.InstructorId,
+                course.InstructorId
             },
             unitOfWork.Transaction
         );

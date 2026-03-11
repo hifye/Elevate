@@ -1,4 +1,6 @@
 ﻿using ElevateApi.Exceptions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -14,6 +16,17 @@ public static class DependencyInjection
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
         services.AddMediatR(opt => opt.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
+
+        services.AddAuthorization(opt =>
+        {
+            opt.AddPolicy("Instructor", policy => policy.RequireRole("1"));
+            opt.AddPolicy("Student", policy => policy.RequireRole("2"));
+            opt.AddPolicy("Both", policy => policy.RequireRole("1", "2"));
+            opt.DefaultPolicy = new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
         
         services.AddSwaggerGen(opt =>
         {

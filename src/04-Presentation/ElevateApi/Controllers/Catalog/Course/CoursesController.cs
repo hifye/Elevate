@@ -8,16 +8,20 @@ using Application.Features.Catalog.Queries.Course.GetCoursesByTitle;
 using Application.Features.Catalog.Queries.Course.GetInstructorByName;
 using ElevateApi.Commom.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElevateApi.Controllers.Catalog.Course;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CoursesController(IMediator mediator) : ControllerBase
 {
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CourseListItem>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = "Both")]
     [HttpGet("GetAll", Name = "GetAllCourses")]
     public async Task<ActionResult<IEnumerable<CourseListItem>>> GetAllCourses()
     {
@@ -27,6 +31,7 @@ public class CoursesController(IMediator mediator) : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CourseListItem>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = "Both")]
     [HttpGet("GetCoursesByTitle/{title}", Name = "GetCoursesByTitle")]
     public async Task<ActionResult<IEnumerable<CourseListItem>>> GetCoursesByTitle(string title)
     {
@@ -36,6 +41,7 @@ public class CoursesController(IMediator mediator) : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InstructorListItem))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = "Student")]
     [HttpGet("GetInstructor/{name}", Name = "GetInstructorByName")]
     public async Task<ActionResult<InstructorListItem>> GetInstructorByName(string name)
     {
@@ -45,6 +51,7 @@ public class CoursesController(IMediator mediator) : ControllerBase
     
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize(Policy = "Instructor")]
     [HttpPost(Name = "CreateCourse")]
     public async Task<ActionResult> CreateCourse(CreateCourseCommand command)
     {
@@ -57,6 +64,7 @@ public class CoursesController(IMediator mediator) : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = "Instructor")]
     [HttpPut(Name = "UpdateCourse")]
     public async Task<ActionResult> UpdateCourse(UpdateCourseCommand command)
     {
@@ -69,6 +77,7 @@ public class CoursesController(IMediator mediator) : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]   
+    [Authorize(Policy = "Instructor")]
     [HttpPatch(Name = "PatchCourse")]
     public async Task<ActionResult> PatchCourse(PatchCourseCommand command)
     {
@@ -78,6 +87,7 @@ public class CoursesController(IMediator mediator) : ControllerBase
 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = "Instructor")]
     [HttpDelete(Name = "DeleteCourse")]
     public async Task<ActionResult> DeleteCourse(DeleteCourseCommand command)
     {

@@ -33,6 +33,7 @@ public class JwtTokenService(IConfiguration configuration) : ITokenService
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email.Address),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Role, user.RoleId.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti.ToString(), Guid.NewGuid().ToString()),
         };
     }

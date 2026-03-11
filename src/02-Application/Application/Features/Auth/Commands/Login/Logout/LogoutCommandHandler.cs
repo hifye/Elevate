@@ -1,11 +1,12 @@
 ﻿using Application.Abstraction.Persistance.Repositories.Auth;
+using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using Domain.Commom;
 using MediatR;
 
 namespace Application.Features.Auth.Commands.Login.Logout;
 
-public class LogoutCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+public class LogoutCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUser)
     : IRequestHandler<LogoutCommand, Result>
 {
     public async Task<Result> Handle(LogoutCommand query, CancellationToken cancellationToken)

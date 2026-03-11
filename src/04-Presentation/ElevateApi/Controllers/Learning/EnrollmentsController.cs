@@ -5,12 +5,15 @@ using Application.Features.Learning.ListItem;
 using Application.Features.Learning.Queries.GetAllEnrollmentsByStudents;
 using ElevateApi.Commom.Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ElevateApi.Controllers.Learning;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Student")]
 public class EnrollmentsController(IMediator mediator) : ControllerBase
 {
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentListItem>))]
