@@ -1,6 +1,4 @@
-﻿using Application.Abstraction.Persistance.Repositories.Catalog;
-using Application.Abstraction.Queries;
-using Application.Features.Auth.Responses;
+﻿using Application.Abstraction.Queries;
 using Application.Features.Catalog.ListItem;
 using Domain.Commom;
 using MediatR;

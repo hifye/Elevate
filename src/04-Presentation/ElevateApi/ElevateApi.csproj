@@ -23,4 +23,8 @@
       <ProjectReference Include="..\..\03-Infrastructure\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="logs\" />
+    </ItemGroup>
+
 </Project>

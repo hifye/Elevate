@@ -38,6 +38,6 @@ public class User
             .Map(validEmail => new User(roleId, name, validEmail, passwordHash));
     }
 
-    private User()
+    protected User()
     { }
 }

@@ -1,6 +1,4 @@
-﻿using Application.Features.Catalog.ListItem;
-using Application.Features.Catalog.Queries.Lesson.GetAllLessons;
-using Dapper;
+﻿using Dapper;
 using Infrastructure.Configurations.TypeHandlers;
 
 namespace Infrastructure.Configurations;

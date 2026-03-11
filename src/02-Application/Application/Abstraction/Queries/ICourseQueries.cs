@@ -1,5 +1,4 @@
 ﻿using Application.Features.Catalog.ListItem;
-using Application.Features.Catalog.Queries.Course;
 
 namespace Application.Abstraction.Queries;
 

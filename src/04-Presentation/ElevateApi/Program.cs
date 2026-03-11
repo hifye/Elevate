@@ -3,7 +3,6 @@ using ElevateApi.Configurations;
 using Infrastructure.Configurations;
 using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
 

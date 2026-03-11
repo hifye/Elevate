@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Text.Json;
 using Application.Abstraction.Queries;
-using Application.Features.Catalog.ListItem;
 using Application.Features.Learning.ListItem;
 using Dapper;
 using Infrastructure.Data.Sql;

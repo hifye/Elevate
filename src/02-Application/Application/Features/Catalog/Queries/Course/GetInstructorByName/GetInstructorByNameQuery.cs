@@ -1,5 +1,4 @@
-﻿using Application.Features.Auth.Responses;
-using Application.Features.Catalog.ListItem;
+﻿using Application.Features.Catalog.ListItem;
 using Domain.Commom;
 using MediatR;
 

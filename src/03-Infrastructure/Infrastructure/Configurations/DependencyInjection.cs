@@ -8,7 +8,6 @@ using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
 using Infrastructure.Data.Queries;
 using Infrastructure.Identity;
-using Infrastructure.Persistance;
 using Infrastructure.Persistance.Repositories.Auth;
 using Infrastructure.Persistance.Repositories.Catalog;
 using Infrastructure.Persistance.Repositories.Learning;
