@@ -1,12 +1,12 @@
-﻿# ElevateApi - Guia Técnico e Arquitetural 🏗️
+# ElevateApi - Guia Técnico e Arquitetural 🏗️
 
-Este documento foi criado para fornecer uma visão profunda sobre as decisões de design, padrões de arquitetura e tecnologias implementadas no **ElevateApi**. Se você é um recrutador ou desenvolvedor interessado em como este projeto foi construído, este guia é para você.
+Este documento foi criado para fornecer uma visão profunda sobre as decisões de design, padrões de arquitetura e tecnologias implementadas no **ElevateApi**. Se você é um recrutador ou desenvolvedor interessado em entender a abordagem técnica deste projeto, este é o lugar certo!
 
 ---
 
 ## 🏛️ Arquitetura: Clean Architecture
 
-O projeto segue os princípios da **Arquitetura Limpa**, com o objetivo de separar as preocupações e garantir que a lógica de negócio (o "coração" da aplicação) seja independente de frameworks, bancos de dados ou interfaces externas.
+O projeto segue os princípios da **Arquitetura Limpa**, com o objetivo de separar as preocupações e garantir que a lógica de negócio (o "coração" da aplicação) seja independente de frameworks externos.
 
 ### Camadas do Sistema:
 - **Domain (Núcleo):** Contém as entidades de negócio, objetos de valor (`Value Objects`) e lógica puramente de domínio. É a camada mais interna e não possui dependências externas.
