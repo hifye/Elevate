@@ -1,66 +1,62 @@
-# ElevateApi - Guia Técnico e Arquitetural 🏗️
+# Elevate
 
-Este documento foi criado para fornecer uma visão profunda sobre as decisões de design, padrões de arquitetura e tecnologias implementadas no **ElevateApi**. Se você é um recrutador ou desenvolvedor interessado em entender a abordagem técnica deste projeto, este é o lugar certo!
+Elevate é uma **API REST construída em .NET** que simula um **sistema de gestão de cursos e inscrições**, ideal como projeto de referência para boas práticas de arquitetura e desenvolvimento de software escalável.
 
----
-
-## 🏛️ Arquitetura: Clean Architecture
-
-O projeto segue os princípios da **Arquitetura Limpa**, com o objetivo de separar as preocupações e garantir que a lógica de negócio (o "coração" da aplicação) seja independente de frameworks externos.
-
-### Camadas do Sistema:
-- **Domain (Núcleo):** Contém as entidades de negócio, objetos de valor (`Value Objects`) e lógica puramente de domínio. É a camada mais interna e não possui dependências externas.
-- **Application:** Onde residem os casos de uso. Implementa o padrão **CQRS** com **MediatR**. Aqui definimos as interfaces que a infraestrutura deve implementar, garantindo o desacoplamento.
-- **Infrastructure:** Responsável pelo acesso a dados (PostgreSQL + Dapper), segurança (JWT), e serviços externos.
-- **Presentation (API):** Ponto de entrada da aplicação, focado em expor os endpoints e gerenciar as requisições HTTP.
+O projeto foi desenvolvido para demonstrar como criar **APIs robustas e organizadas**, aplicando **Clean Architecture**, **CQRS**, integração com bancos de dados e padrões modernos de desenvolvimento.
 
 ---
 
-## 🚀 Padrões e Práticas de Desenvolvimento
+## 🚀 Funcionalidades do projeto
 
-### 1. CQRS (Command Query Responsibility Segregation)
-Utilizamos o **MediatR** para separar as operações de escrita (**Commands**) das operações de leitura (**Queries**).
-- **Vantagem:** Permite otimizar as consultas de forma independente da lógica de alteração de dados, além de simplificar os controladores da API.
+Elevate modela funcionalidades típicas de uma plataforma de aprendizado online:
 
-### 2. Result Pattern & Functional Error Handling
-Em vez de depender de exceções para controlar o fluxo de negócio (o que pode ser custoso em termos de performance), utilizamos o **Result Pattern** (`Result.cs`).
-- Isso torna o código mais previsível e fácil de testar, forçando o tratamento de cenários de sucesso e falha de forma explícita.
-- Implementamos métodos como `Bind` e `Map` para permitir um encadeamento funcional das operações.
+- **Gerenciamento de cursos**: criar, listar, atualizar e excluir cursos.  
+- **Gestão de instrutores**: adicionar e consultar instrutores, vinculando-os aos cursos.  
+- **Inscrições de alunos**: cadastrar alunos, realizar inscrições em cursos e acompanhar status.  
+- **Autenticação e segurança**: controle de acesso via **JWT**, garantindo que apenas usuários autorizados possam realizar operações sensíveis.  
+- **Validações consistentes**: uso de **FluentValidation** e **Pipeline Behaviors** para assegurar integridade dos dados e tratamento previsível de erros.  
+- **APIs escaláveis e performáticas**: implementação de **Clean Architecture** e **CQRS** para separar leitura e escrita, garantindo organização e manutenibilidade do código.  
 
-### 3. Validação com FluentValidation & Pipeline Behaviors
-As validações de entrada são separadas da lógica de negócio. Utilizamos **Validation Behaviors** no pipeline do MediatR.
-- Toda requisição que chega passa automaticamente por um validador antes de atingir o Handler. Se houver falhas, uma exceção de validação é lançada e capturada globalmente.
-
-### 4. Alta Performance com Dapper
-Optamos pelo **Dapper** em vez de um ORM pesado (como EF Core) para as consultas.
-- **Por que?** O Dapper oferece uma performance próxima ao ADO.NET puro, permitindo total controle sobre o SQL executado.
-- As consultas SQL são centralizadas em classes constantes (`CourseSql.cs`), facilitando a manutenção e o tuning.
-
-### 5. Unit of Work & Transacionalidade
-Garantimos a integridade dos dados através do padrão **Unit of Work**.
-- Todas as operações dentro de um mesmo caso de uso compartilham a mesma transação de banco de dados, sendo confirmadas (`Commit`) apenas se tudo ocorrer com sucesso.
-
-### 6. Guard Clauses
-Utilizamos classes de proteção (**Guard Clauses**) para validar pré-condições em entidades e objetos de valor, evitando que o sistema entre em um estado inválido.
+⚠️ O Elevate é voltado para **aprendizado e referência técnica**, não sendo um produto pronto para produção.
 
 ---
 
-## 🛡️ Segurança e Observabilidade
+## 🧠 Propósito
 
-- **JWT (JSON Web Token):** Autenticação robusta com tokens de acesso e suporte a autorização baseada em roles.
-- **Logging Estruturado:** Com **Serilog**, capturamos logs ricos em detalhes (incluindo MachineName, ThreadId e contextos de erro) salvos em arquivos rotativos e console.
-- **Global Exception Handling:** Um middleware centralizado captura erros não tratados e retorna respostas padronizadas ao cliente, evitando vazamento de informações sensíveis.
+Este projeto serve para:
 
----
-
-## 🧠 Diferenciais Técnicos
-
-- **C# 13 & .NET 9:** Uso de recursos modernos da linguagem para um código mais limpo e performático.
-- **Separation of Concerns:** Cada classe tem uma responsabilidade única e bem definida.
-- **Testabilidade:** A arquitetura permite mockar facilmente as dependências de infraestrutura para testes unitários da lógica de aplicação.
+- Desenvolvedores que querem entender e aplicar **arquitetura limpa em .NET**.  
+- Times que precisam de um **template de projeto inicial** para APIs REST escaláveis.  
+- Pessoas que querem estudar **CQRS, validação pipeline e autenticação JWT** em um contexto de negócios realista.  
 
 ---
 
-## 📩 Contato
+## 🛠️ Tecnologias principais
 
-Se você gostou da abordagem técnica deste projeto e deseja discutir oportunidades ou colaborações, sinta-se à vontade para entrar em contato através do meu perfil no GitHub ou LinkedIn.
+- **.NET 9 / C# 13**  
+- **Clean Architecture / CQRS / MediatR**  
+- **Dapper / PostgreSQL / SQL Server**  
+- **JWT Authentication**  
+- **FluentValidation & Pipeline Behaviors**  
+- **APIs REST / Integração de sistemas distribuídos**  
+- **Serilog para logging estruturado**
+
+---
+
+## 🧩 Estrutura do projeto
+
+- `Domain` – modelos, regras de negócio e objetos de valor  
+- `Application` – casos de uso, comandos e consultas  
+- `Infrastructure` – acesso a dados e serviços externos  
+- `Presentation` – API e endpoints
+
+---
+
+## ▶️ Como rodar
+
+> **Pré-requisitos:** .NET SDK 9, Docker (opcional), PostgreSQL configurado
+
+1. Clone o repositório  
+   ```bash
+   git clone https://github.com/hifye/Elevate.git
+   cd Elevate
