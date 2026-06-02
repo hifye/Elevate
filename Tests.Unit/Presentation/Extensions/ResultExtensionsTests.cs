@@ -57,4 +57,24 @@ public class ResultExtensionsTests
         var objectResult = actionResult as ObjectResult;
         objectResult!.Value.Should().Be(errorMessage);
     }
+
+    [Theory]
+    [InlineData("Not Found", typeof(NotFoundObjectResult))]
+    [InlineData("Unauthorized", typeof(UnauthorizedObjectResult))]
+    [InlineData("Conflict", typeof(ConflictObjectResult))]
+    [InlineData("Unknown Error", typeof(BadRequestObjectResult))]
+    public void ToActionResult_GenericFailureResult_ShouldReturnCorrectStatusCode(string errorCode, Type expectedType)
+    {
+        // Arrange
+        var errorMessage = "An error occurred";
+        var result = Result<string>.Failure(errorMessage, errorCode);
+
+        // Act
+        var actionResult = result.ToActionResult();
+
+        // Assert
+        actionResult.Should().BeOfType(expectedType);
+        var objectResult = actionResult as ObjectResult;
+        objectResult!.Value.Should().Be(errorMessage);
+    }
 }

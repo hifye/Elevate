@@ -2,11 +2,10 @@
 using Application.Features.Catalog.Commands.Course.CreateCourse;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWork;
-using Domain.Entities.Catalog;
 using FluentAssertions;
 using Moq;
 
-namespace Tests.Unit.Application.Catalog.Commands.Courses;
+namespace Tests.Unit.Application.Catalog.Commands.Course;
 
 public class CreateCourseCommandHandlerTests
 {
@@ -39,7 +38,7 @@ public class CreateCourseCommandHandlerTests
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        _courseRepositoryMock.Verify(x => x.Create(It.Is<Course>(c => 
+        _courseRepositoryMock.Verify(x => x.Create(It.Is<global::Domain.Entities.Catalog.Course>(c => 
             c.Title == command.Title && 
             c.Description == command.Description && 
             c.Price.Value == command.Price &&
@@ -60,7 +59,26 @@ public class CreateCourseCommandHandlerTests
         // Assert
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be("Title cannot be null");
-        _courseRepositoryMock.Verify(x => x.Create(It.IsAny<Course>()), Times.Never);
+        _courseRepositoryMock.Verify(x => x.Create(It.IsAny<global::Domain.Entities.Catalog.Course>()), Times.Never);
+        _unitOfWorkMock.Verify(x => x.CommitAsync(), Times.Never);
+    }
+
+    [Fact]
+    public async Task Handle_WhenRepositoryThrows_ShouldPropagateExceptionAndNotCommit()
+    {
+        // Arrange
+        var command = new CreateCourseCommand("Title", "Description", 100);
+        _currentUserServiceMock.Setup(x => x.UserId).Returns(Guid.NewGuid());
+        _courseRepositoryMock
+            .Setup(x => x.Create(It.IsAny<global::Domain.Entities.Catalog.Course>()))
+            .ThrowsAsync(new InvalidOperationException("Repository unavailable"));
+
+        // Act
+        var action = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await action.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("Repository unavailable");
         _unitOfWorkMock.Verify(x => x.CommitAsync(), Times.Never);
     }
 }

@@ -72,7 +72,7 @@ public class Course
 
     public Result UpdateTitle(string title)
     {
-        Guard
+        var result = Guard
             .AgainstNullOrWhiteSpace(title, "Title cannot be null")
             .Bind(() =>
                 title.Length > 100
@@ -80,13 +80,18 @@ public class Course
                     : Result.Success()
             );
 
+        if (result.IsFailure)
+            return result;
+
         Title = title;
         return Result.Success();
     }
 
     public Result UpdateDescription(string description)
     {
-        Guard.AgainstNullOrWhiteSpace(description, "Description cannot be null");
+        var result = Guard.AgainstNullOrWhiteSpace(description, "Description cannot be null");
+        if (result.IsFailure)
+            return result;
         Description = description;
         return Result.Success();
     }

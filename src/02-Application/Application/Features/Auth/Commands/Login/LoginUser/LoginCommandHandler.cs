@@ -28,7 +28,7 @@ public class LoginCommandHandler(IUserRepository userRepository, IUnitOfWork uni
         if (passwordHasher.NeedsRehash(login.PasswordHash))
         {
             var newHash = passwordHasher.HashPassword(command.Password);
-            
+                
             login.PasswordHash = newHash;
             await userRepository.UpdatePassword(login.Id, newHash);
         }

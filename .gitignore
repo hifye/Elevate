@@ -79,3 +79,5 @@ secrets.json
 # Rider HTTP scratch files
 #######################################
 
+.aider*
+.env
